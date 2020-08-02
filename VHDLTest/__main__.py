@@ -4,6 +4,7 @@ import argparse
 import sys
 import yaml
 from .simulator.SimulatorFactory import SimulatorFactory
+from .Configuration import Configuration
 
 def main():
     """VHDL Testbench Runner application entry point"""
@@ -34,11 +35,15 @@ def main():
     if args.config == None:
         parser.print_help()
         sys.exit(1)
+        
+    # Read the configuration
+    config = Configuration(args.config)
 
     # Create a simulator
     simulator = SimulatorFactory.create_simulator()
     if simulator == None:
-        print('No simulator installed. Please add a simulator to the path')
+        print('VHDL Testbench Runner (VHDLTest)')
+        print('  Error: No simulator installed. Please add a simulator to the path')
         sys.exit(1)
     
     # Print simulator name
