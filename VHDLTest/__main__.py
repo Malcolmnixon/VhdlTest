@@ -3,6 +3,7 @@
 import argparse
 import sys
 import yaml
+from .simulator.SimulatorFactory import SimulatorFactory
 
 def main():
     """VHDL Testbench Runner application entry point"""
@@ -34,6 +35,15 @@ def main():
         parser.print_help()
         sys.exit(1)
 
+    # Create a simulator
+    simulator = SimulatorFactory.create_simulator()
+    if simulator == None:
+        print('No simulator installed. Please add a simulator to the path')
+        sys.exit(1)
     
+    # Print simulator name
+    print('VHDL Testbench Runner')
+    print(f'  Using {simulator.name} simulator.')
+
 if __name__ == '__main__':
     main()
