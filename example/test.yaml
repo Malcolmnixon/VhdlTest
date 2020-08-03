@@ -1,0 +1,6 @@
+files:
+ - full_adder.vhd
+ - full_adder_tb.vhd
+ 
+tests:
+ - full_adder_tb
