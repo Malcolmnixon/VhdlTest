@@ -1,3 +1,4 @@
+from typing import List
 import os
 import yaml
 
@@ -32,14 +33,14 @@ class Configuration(object):
         return self._doc or {}
 
     @property
-    def files(self):
+    def files(self) -> List[str]:
         """
         Gets the files mentioned in the configuration.
         """
         return self.doc.get('files') or []
 
     @property
-    def tests(self):
+    def tests(self) -> List[str]:
         """
         Gets the tests mentioned in the configuration.
         """

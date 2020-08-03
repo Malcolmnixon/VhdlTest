@@ -1,3 +1,4 @@
+from typing import List
 from .SimulatorInterface import SimulatorInterface
 from .ActiveHDL import ActiveHDL
 from .GHDL import GHDL
@@ -9,7 +10,7 @@ class SimulatorFactory(object):
     """
 
     @staticmethod
-    def simulator_list():
+    def simulator_list() -> List[SimulatorInterface]:
         """Returns the list of supported simulators."""
         return [
             ActiveHDL,
@@ -17,7 +18,7 @@ class SimulatorFactory(object):
         ]
 
     @staticmethod
-    def available_simulators():
+    def available_simulators() -> List[SimulatorInterface]:
         """Returns the list of available simulators."""
         return [sim for sim in SimulatorFactory.simulator_list() if sim.is_available()]
 

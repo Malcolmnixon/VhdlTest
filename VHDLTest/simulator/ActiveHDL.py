@@ -1,7 +1,8 @@
 import os
 import shutil
-import subprocess
 from .SimulatorInterface import SimulatorInterface
+from .SimulatorResults import SimulatorResults
+from .SimulatorResults import ResultLineType
 from ..Configuration import Configuration
 
 
@@ -9,6 +10,16 @@ class ActiveHDL(SimulatorInterface):
     """
     ActiveHDL Simulator class.
     """
+
+    """Result parse rules."""
+    rules = [
+        ("Error: ", ResultLineType.error),
+        ("KERNEL: Warning: ", ResultLineType.warning),
+        ("EXECUTION:: NOTE", ResultLineType.execution_note),
+        ("EXECUTION:: WARNING", ResultLineType.execution_warning),
+        ("EXECUTION:: ERROR", ResultLineType.execution_error),
+        ("EXECUTION:: FAILURE", ResultLineType.execution_failure)
+    ]
 
     def __init__(self):
         """ActiveHDL Simulator constructor."""
@@ -24,7 +35,7 @@ class ActiveHDL(SimulatorInterface):
         # Return directory name
         return os.path.dirname(vsimsa_path)
 
-    def compile(self, config: Configuration):
+    def compile(self, config: Configuration) -> SimulatorResults:
         # Create the directory
         if not os.path.isdir('VHDLTest.out/ActiveHDL'):
             os.makedirs('VHDLTest.out/ActiveHDL')
@@ -37,10 +48,14 @@ class ActiveHDL(SimulatorInterface):
             for file in config.files:
                 stream.write(f'acom -2008 -dbg {file}\n')
 
-        # Run the compile script
-        subprocess.run(['vsimsa', '-do', 'VHDLTest.out/ActiveHDL/compile.do'])
+        # Run the compile
+        return SimulatorInterface.run_process([
+            'vsimsa',
+            '-do',
+            'VHDLTest.out/ActiveHDL/compile.do'],
+            ActiveHDL.rules)
 
-    def test(self, config: Configuration, test: str):
+    def test(self, config: Configuration, test: str) -> SimulatorResults:
         # Write the test script
         with open('VHDLTest.out/ActiveHDL/test.do', 'w') as stream:
             stream.write('onerror {exit -code 1}\n')
@@ -50,5 +65,9 @@ class ActiveHDL(SimulatorInterface):
             stream.write('endsim\n')
             stream.write('exit -code 0\n')
 
-        # Run the script
-        subprocess.run(['vsimsa', '-do', 'VHDLTest.out/ActiveHDL/test.do'])
+        # Run the test
+        return SimulatorInterface.run_process([
+            'vsimsa',
+            '-do',
+            'VHDLTest.out/ActiveHDL/test.do'],
+            ActiveHDL.rules)
