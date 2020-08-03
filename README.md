@@ -1,3 +1,5 @@
+![CI/Test](https://github.com/Malcolmnixon/VhdlTest/workflows/CI/Test/badge.svg)
+
 # VHDL Testbench Runner
 This python module runs VHDL testbenches and generates a report of the results.
 
