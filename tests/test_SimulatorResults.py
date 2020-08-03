@@ -2,13 +2,13 @@ from VHDLTest.simulator.SimulatorResults import SimulatorResults
 from VHDLTest.simulator.SimulatorResults import ResultLineType
 
 
-def test_empty_results():
+def test_empty_results() -> None:
     res = SimulatorResults()
     assert res is not None
     assert len(res.lines) == 0
 
 
-def append_output():
+def append_output() -> None:
     res = SimulatorResults()
     assert res is not None
     assert len(res.lines) == 0

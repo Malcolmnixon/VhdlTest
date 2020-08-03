@@ -6,7 +6,7 @@ import yaml
 class Configuration(object):
     """YAML configuration class."""
 
-    def __init__(self, filename: str):
+    def __init__(self, filename: str) -> None:
         """
         Configuration constructor.
 
@@ -26,7 +26,7 @@ class Configuration(object):
         self._doc = yaml.load(contents, Loader=yaml.SafeLoader)
 
     @property
-    def doc(self):
+    def doc(self) -> object:
         """
         Gets the YAML document.
         """

@@ -24,7 +24,7 @@ class GHDL(SimulatorInterface):
         (r".*:\(report failure\):", ResultLineType.execution_failure)
     ]
 
-    def __init__(self):
+    def __init__(self) -> None:
         """GHDL Simulator constructor."""
         super().__init__('GHDL')
 
@@ -54,8 +54,7 @@ class GHDL(SimulatorInterface):
             '-a',
             '--std=08',
             '--workdir=VHDLTest.out/GHDL',
-            '@VHDLTest.out/GHDL/compile.rsp'
-            ],
+            '@VHDLTest.out/GHDL/compile.rsp'],
             GHDL.rules)
 
     def test(self, config: Configuration, test: str) -> SimulatorResults:

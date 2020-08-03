@@ -21,7 +21,7 @@ class ActiveHDL(SimulatorInterface):
         ("EXECUTION:: FAILURE", ResultLineType.execution_failure)
     ]
 
-    def __init__(self):
+    def __init__(self) -> None:
         """ActiveHDL Simulator constructor."""
         super().__init__('ActiveHDL')
 

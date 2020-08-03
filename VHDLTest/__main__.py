@@ -6,7 +6,7 @@ from .simulator.SimulatorFactory import SimulatorFactory
 from .Configuration import Configuration
 
 
-def main():
+def main() -> None:
     """VHDL Testbench Runner application entry point"""
 
     # Construct the argument parser

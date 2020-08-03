@@ -10,7 +10,7 @@ class SimulatorInterface(object):
     Generic Simulator interface.
     """
 
-    def __init__(self, name: str):
+    def __init__(self, name: str) -> None:
         """
         Simulator Interface constructor.
 
