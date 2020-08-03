@@ -1,3 +1,5 @@
+from ..Configuration import Configuration
+
 class SimulatorInterface(object):
     """
     Generic Simulator interface.
@@ -31,3 +33,7 @@ class SimulatorInterface(object):
     @classmethod
     def find_path(cls) -> str:
         """Find the path to the simulator."""
+
+    def run(self, config: Configuration):
+        """Run the simulator."""
+        

@@ -25,3 +25,17 @@ class Configuration(object):
             
         # Parse the configuration file contents
         self._doc = yaml.load(contents, Loader=yaml.SafeLoader)
+
+    @property
+    def files(self):
+        """
+        Gets the files mentioned in the configuration.
+        """
+        return self._doc['files']
+
+    @property
+    def tests(self):
+        """
+        Gets the tests mentioned in the configuration.
+        """
+        return self._doc['tests']
