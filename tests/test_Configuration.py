@@ -1,29 +1,32 @@
 import pytest
 from VHDLTest.Configuration import Configuration
 
+
 def test_load_missing():
     """
-    Test that loading a missing configuration generates a RuntimeError.
+    Test missing configuration.
     """
     with pytest.raises(RuntimeError):
         conf = Configuration('tests/configurations/missing.yaml')
-        assert conf == None
-    
+        assert conf is None
+
+
 def test_load_empty():
     """
-    Test that loading an empty configuration works but provides no files or tests.
+    Test empty configuration.
     """
     conf = Configuration('tests/configurations/empty.yaml')
-    assert conf != None
+    assert conf is not None
     assert len(conf.files) == 0
     assert len(conf.tests) == 0
-    
+
+
 def test_load_valid():
     """
-    Test that loading a valid configuration provides the files and tests.
+    Test valid configuration and contents.
     """
     conf = Configuration('tests/configurations/valid.yaml')
-    assert conf != None
+    assert conf is not None
     assert len(conf.files) == 2
     assert 'file1.vhd' in conf.files
     assert 'file2.vhd' in conf.files

@@ -4,6 +4,7 @@ import subprocess
 from .SimulatorInterface import SimulatorInterface
 from ..Configuration import Configuration
 
+
 class ActiveHDL(SimulatorInterface):
     """
     ActiveHDL Simulator class.
@@ -17,9 +18,9 @@ class ActiveHDL(SimulatorInterface):
     def find_path(cls) -> str:
         # Find vsimsa executable
         vsimsa_path = shutil.which('vsimsa')
-        if vsimsa_path == None:
+        if vsimsa_path is None:
             return None
-        
+
         # Return directory name
         return os.path.dirname(vsimsa_path)
 
@@ -27,11 +28,11 @@ class ActiveHDL(SimulatorInterface):
         # Create the directory
         if not os.path.isdir('VHDLTest.out/ActiveHDL'):
             os.makedirs('VHDLTest.out/ActiveHDL')
-        
+
         # Write the 'do' file
         with open('VHDLTest.out/ActiveHDL/work.do', 'w') as stream:
             stream.write('onerror {exit -code 1}\n')
-            stream.write('alib work VHDLTest.out\ActiveHDL\n')
+            stream.write('alib work VHDLTest.out/ActiveHDL\n')
             stream.write('set worklib work\n')
             for file in config.files:
                 stream.write(f'acom -2008 -dbg {file}\n')
@@ -40,6 +41,6 @@ class ActiveHDL(SimulatorInterface):
                 stream.write('run -all\n')
                 stream.write('endsim\n')
             stream.write('exit -code 0\n')
-        
+
         # Run the script
         subprocess.run(['vsimsa', '-do', 'VHDLTest.out/ActiveHDL/work.do'])

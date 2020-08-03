@@ -4,6 +4,7 @@ import subprocess
 from .SimulatorInterface import SimulatorInterface
 from ..Configuration import Configuration
 
+
 class GHDL(SimulatorInterface):
     """
     GHDL Simulator class.
@@ -17,9 +18,9 @@ class GHDL(SimulatorInterface):
     def find_path(cls) -> str:
         # Find ghdl executable
         ghdl_path = shutil.which('ghdl')
-        if ghdl_path == None:
+        if ghdl_path is None:
             return None
-        
+
         # Return directory name
         return os.path.dirname(ghdl_path)
 
@@ -35,7 +36,7 @@ class GHDL(SimulatorInterface):
 
         # Run the analysis
         subprocess.run(['ghdl', '-a', '--std=08', '--workdir=VHDLTest.out/GHDL', '@VHDLTest.out/GHDL/analysis.rsp'])
-        
+
         # Run the tests
         for test in config.tests:
             subprocess.run(['ghdl', '-r', '--std=08', '--workdir=VHDLTest.out/GHDL', test])
