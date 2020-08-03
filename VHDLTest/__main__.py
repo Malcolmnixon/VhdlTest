@@ -50,8 +50,11 @@ def main():
     print('VHDL Testbench Runner')
     print(f'  Using {simulator.name} simulator.')
 
-    # Run the simulation
-    simulator.run(config)
+    # Compile the code
+    simulator.compile(config)
+
+    # Run all tests
+    simulator.test_all(config)
 
 
 if __name__ == '__main__':

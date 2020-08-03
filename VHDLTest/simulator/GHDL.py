@@ -24,19 +24,33 @@ class GHDL(SimulatorInterface):
         # Return directory name
         return os.path.dirname(ghdl_path)
 
-    def run(self, config: Configuration):
+    def compile(self, config: Configuration):
         # Create the directory
         if not os.path.isdir('VHDLTest.out/GHDL'):
             os.makedirs('VHDLTest.out/GHDL')
 
-        # Write the analysis response file
-        with open('VHDLTest.out/GHDL/analysis.rsp', 'w') as stream:
+        # Write the compile response file
+        with open('VHDLTest.out/GHDL/compile.rsp', 'w') as stream:
             for file in config.files:
                 stream.write(f'{file}\n')
 
-        # Run the analysis
-        subprocess.run(['ghdl', '-a', '--std=08', '--workdir=VHDLTest.out/GHDL', '@VHDLTest.out/GHDL/analysis.rsp'])
+        # Run the compile (analysis)
+        subprocess.run([
+            'ghdl',
+            '-a',
+            '--std=08',
+            '--work work',
+            '--workdir=VHDLTest.out/GHDL',
+            '@VHDLTest.out/GHDL/compile.rsp'
+        ])
 
-        # Run the tests
-        for test in config.tests:
-            subprocess.run(['ghdl', '-r', '--std=08', '--workdir=VHDLTest.out/GHDL', test])
+    def test(self, config: Configuration, test: str):
+        # Run the test
+        subprocess.run([
+            'ghdl',
+            '-r',
+            '--std=08',
+            '--work work',
+            '--workdir=VHDLTest.out/GHDL',
+            test
+        ])

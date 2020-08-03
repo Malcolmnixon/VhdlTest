@@ -35,5 +35,12 @@ class SimulatorInterface(object):
     def find_path(cls) -> str:
         """Find the path to the simulator."""
 
-    def run(self, config: Configuration):
-        """Run the simulator."""
+    def compile(self, config: Configuration):
+        """Compile the VHDL files into a library."""
+
+    def test(self, config: Configuration, test: str):
+        """Execute a single test."""
+
+    def test_all(self, config: Configuration):
+        """Run all configured tests."""
+        return [self.test(config, test) for test in config.tests]

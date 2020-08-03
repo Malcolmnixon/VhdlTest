@@ -24,23 +24,31 @@ class ActiveHDL(SimulatorInterface):
         # Return directory name
         return os.path.dirname(vsimsa_path)
 
-    def run(self, config: Configuration):
+    def compile(self, config: Configuration):
         # Create the directory
         if not os.path.isdir('VHDLTest.out/ActiveHDL'):
             os.makedirs('VHDLTest.out/ActiveHDL')
 
-        # Write the 'do' file
-        with open('VHDLTest.out/ActiveHDL/work.do', 'w') as stream:
+        # Write the compile script
+        with open('VHDLTest.out/ActiveHDL/compile.do', 'w') as stream:
             stream.write('onerror {exit -code 1}\n')
             stream.write('alib work VHDLTest.out/ActiveHDL\n')
             stream.write('set worklib work\n')
             for file in config.files:
                 stream.write(f'acom -2008 -dbg {file}\n')
-            for test in config.tests:
-                stream.write(f'asim {test}\n')
-                stream.write('run -all\n')
-                stream.write('endsim\n')
+
+        # Run the compile script
+        subprocess.run(['vsimsa', '-do', 'VHDLTest.out/ActiveHDL/compile.do'])
+
+    def test(self, config: Configuration, test: str):
+        # Write the test script
+        with open('VHDLTest.out/ActiveHDL/test.do', 'w') as stream:
+            stream.write('onerror {exit -code 1}\n')
+            stream.write('set worklib work\n')
+            stream.write(f'asim {test}\n')
+            stream.write('run -all\n')
+            stream.write('endsim\n')
             stream.write('exit -code 0\n')
 
         # Run the script
-        subprocess.run(['vsimsa', '-do', 'VHDLTest.out/ActiveHDL/work.do'])
+        subprocess.run(['vsimsa', '-do', 'VHDLTest.out/ActiveHDL/test.do'])
