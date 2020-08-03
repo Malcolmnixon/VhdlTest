@@ -42,66 +42,64 @@ BEGIN
         b_in <= '0';
         c_in <= '0';
         WAIT FOR c_clk_period;
-        ASSERT (s_out = '0') REPORT "Unexpected s_out value" SEVERITY warning;
-        ASSERT (c_out = '0') REPORT "Unexpected c_out value" SEVERITY warning;
+        ASSERT (s_out = '0') REPORT "Unexpected s_out value" SEVERITY error;
+        ASSERT (c_out = '0') REPORT "Unexpected c_out value" SEVERITY error;
     
         -- Test
         a_in <= '1';
         b_in <= '0';
         c_in <= '0';
         WAIT FOR c_clk_period;
-        ASSERT (s_out = '1') REPORT "Unexpected s_out value" SEVERITY warning;
-        ASSERT (c_out = '0') REPORT "Unexpected c_out value" SEVERITY warning;
+        ASSERT (s_out = '1') REPORT "Unexpected s_out value" SEVERITY error;
+        ASSERT (c_out = '0') REPORT "Unexpected c_out value" SEVERITY error;
     
         -- Test
         a_in <= '0';
         b_in <= '1';
         c_in <= '0';
         WAIT FOR c_clk_period;
-        ASSERT (s_out = '1') REPORT "Unexpected s_out value" SEVERITY warning;
-        ASSERT (c_out = '0') REPORT "Unexpected c_out value" SEVERITY warning;
+        ASSERT (s_out = '1') REPORT "Unexpected s_out value" SEVERITY error;
+        ASSERT (c_out = '0') REPORT "Unexpected c_out value" SEVERITY error;
     
         -- Test
         a_in <= '1';
         b_in <= '1';
         c_in <= '0';
         WAIT FOR c_clk_period;
-        ASSERT (s_out = '0') REPORT "Unexpected s_out value" SEVERITY warning;
-        ASSERT (c_out = '1') REPORT "Unexpected c_out value" SEVERITY warning;
+        ASSERT (s_out = '0') REPORT "Unexpected s_out value" SEVERITY error;
+        ASSERT (c_out = '1') REPORT "Unexpected c_out value" SEVERITY error;
     
         -- Test
         a_in <= '0';
         b_in <= '0';
         c_in <= '1';
         WAIT FOR c_clk_period;
-        ASSERT (s_out = '1') REPORT "Unexpected s_out value" SEVERITY warning;
-        ASSERT (c_out = '0') REPORT "Unexpected c_out value" SEVERITY warning;
+        ASSERT (s_out = '1') REPORT "Unexpected s_out value" SEVERITY error;
+        ASSERT (c_out = '0') REPORT "Unexpected c_out value" SEVERITY error;
     
         -- Test
         a_in <= '1';
         b_in <= '0';
         c_in <= '1';
         WAIT FOR c_clk_period;
-        ASSERT (s_out = '0') REPORT "Unexpected s_out value" SEVERITY warning;
-        ASSERT (c_out = '1') REPORT "Unexpected c_out value" SEVERITY warning;
+        ASSERT (s_out = '0') REPORT "Unexpected s_out value" SEVERITY error;
+        ASSERT (c_out = '1') REPORT "Unexpected c_out value" SEVERITY error;
     
         -- Test
         a_in <= '0';
         b_in <= '1';
         c_in <= '1';
         WAIT FOR c_clk_period;
-        ASSERT (s_out = '0') REPORT "Unexpected s_out value" SEVERITY warning;
-        ASSERT (c_out = '1') REPORT "Unexpected c_out value" SEVERITY warning;
+        ASSERT (s_out = '0') REPORT "Unexpected s_out value" SEVERITY error;
+        ASSERT (c_out = '1') REPORT "Unexpected c_out value" SEVERITY error;
     
         -- Test
         a_in <= '1';
         b_in <= '1';
         c_in <= '1';
         WAIT FOR c_clk_period;
-        ASSERT (s_out = '1') REPORT "Unexpected s_out value" SEVERITY warning;
-        ASSERT (c_out = '1') REPORT "Unexpected c_out value" SEVERITY warning;
-
-        REPORT "Boojum failure" SEVERITY failure;
+        ASSERT (s_out = '1') REPORT "Unexpected s_out value" SEVERITY error;
+        ASSERT (c_out = '1') REPORT "Unexpected c_out value" SEVERITY error;
         
         -- Finish the simulation
         std.env.finish;

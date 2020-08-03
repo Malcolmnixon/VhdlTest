@@ -36,25 +36,41 @@ def main():
         parser.print_help()
         sys.exit(1)
 
+    # Print the banner
+    print('VHDL Testbench Runner (VHDLTest)')
+
     # Read the configuration
     config = Configuration(args.config)
 
     # Create a simulator
     simulator = SimulatorFactory.create_simulator()
     if simulator is None:
-        print('VHDL Testbench Runner (VHDLTest)')
         print('  Error: No simulator installed. Please add a simulator to the path')
         sys.exit(1)
 
     # Print simulator name
-    print('VHDL Testbench Runner')
     print(f'  Using {simulator.name} simulator.')
 
     # Compile the code
-    simulator.compile(config)
+    compile_result = simulator.compile(config)
+    if compile_result.any_errors:
+        print('  Error: Compile of VHDL code failed')
+        compile_result.print()
+        sys.exit(1)
 
     # Run all tests
-    simulator.test_all(config)
+    test_results = simulator.test_all(config)
+    print('  Test results:')
+    passed = 0
+    for (name, result) in test_results:
+        if result.any_errors:
+            print(f'    fail: {name}')
+        else:
+            print(f'    pass: {name}')
+            passed = passed + 1
+
+    # Print summary
+    print(f'  Passed {passed} of {len(test_results)} tests')
 
 
 if __name__ == '__main__':

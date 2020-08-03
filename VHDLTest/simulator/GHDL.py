@@ -1,7 +1,8 @@
 import os
 import shutil
-import subprocess
 from .SimulatorInterface import SimulatorInterface
+from .SimulatorResults import SimulatorResults
+from .SimulatorResults import ResultLineType
 from ..Configuration import Configuration
 
 
@@ -9,6 +10,19 @@ class GHDL(SimulatorInterface):
     """
     GHDL Simulator class.
     """
+
+    """Result parse rules."""
+    rules = [
+        (r".*:\d+:\d+: ", ResultLineType.error),
+        (r".*:\(assertion note\):", ResultLineType.execution_note),
+        (r".*:\(report note\):", ResultLineType.execution_note),
+        (r".*:\(assertion warning\):", ResultLineType.execution_warning),
+        (r".*:\(report warning\):", ResultLineType.execution_warning),
+        (r".*:\(assertion error\):", ResultLineType.execution_error),
+        (r".*:\(report error\):", ResultLineType.execution_error),
+        (r".*:\(assertion failure\):", ResultLineType.execution_failure),
+        (r".*:\(report failure\):", ResultLineType.execution_failure)
+    ]
 
     def __init__(self):
         """GHDL Simulator constructor."""
@@ -24,7 +38,7 @@ class GHDL(SimulatorInterface):
         # Return directory name
         return os.path.dirname(ghdl_path)
 
-    def compile(self, config: Configuration):
+    def compile(self, config: Configuration) -> SimulatorResults:
         # Create the directory
         if not os.path.isdir('VHDLTest.out/GHDL'):
             os.makedirs('VHDLTest.out/GHDL')
@@ -34,23 +48,22 @@ class GHDL(SimulatorInterface):
             for file in config.files:
                 stream.write(f'{file}\n')
 
-        # Run the compile (analysis)
-        subprocess.run([
+        # Run the compile
+        return SimulatorInterface.run_process([
             'ghdl',
             '-a',
             '--std=08',
-            '--work work',
             '--workdir=VHDLTest.out/GHDL',
             '@VHDLTest.out/GHDL/compile.rsp'
-        ])
+            ],
+            GHDL.rules)
 
-    def test(self, config: Configuration, test: str):
+    def test(self, config: Configuration, test: str) -> SimulatorResults:
         # Run the test
-        subprocess.run([
+        return SimulatorInterface.run_process([
             'ghdl',
             '-r',
             '--std=08',
-            '--work work',
             '--workdir=VHDLTest.out/GHDL',
-            test
-        ])
+            test],
+            GHDL.rules)
