@@ -1,0 +1,7 @@
+files:
+ - file1.vhd
+ - file2.vhd
+ 
+tests:
+ - file1_tb
+ - file2_tb

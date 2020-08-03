@@ -15,9 +15,7 @@ class Configuration(object):
         
         # Fail if file doesn't exist
         if not os.path.isfile(filename):
-            print('VHDL Testbench Runner (VHDLTest)')
-            print(f'  Error: Configuration file {filename} not found.')
-            sys.exit(1)
+            raise RuntimeError(f'Configuration file {filename} not found.')
         
         # Load the configuration file contents
         with open(filename, 'r') as stream:
@@ -27,15 +25,22 @@ class Configuration(object):
         self._doc = yaml.load(contents, Loader=yaml.SafeLoader)
 
     @property
+    def doc(self):
+        """
+        Gets the YAML document.
+        """
+        return self._doc or {}
+    
+    @property
     def files(self):
         """
         Gets the files mentioned in the configuration.
         """
-        return self._doc['files']
+        return self.doc.get('files') or []
 
     @property
     def tests(self):
         """
         Gets the tests mentioned in the configuration.
         """
-        return self._doc['tests']
+        return self.doc.get('tests') or []
