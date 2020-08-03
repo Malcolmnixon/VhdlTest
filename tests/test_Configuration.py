@@ -2,7 +2,7 @@ import pytest
 from VHDLTest.Configuration import Configuration
 
 
-def test_load_missing():
+def test_load_missing() -> None:
     """
     Test missing configuration.
     """
@@ -11,7 +11,7 @@ def test_load_missing():
         assert conf is None
 
 
-def test_load_empty():
+def test_load_empty() -> None:
     """
     Test empty configuration.
     """
@@ -21,7 +21,7 @@ def test_load_empty():
     assert len(conf.tests) == 0
 
 
-def test_load_valid():
+def test_load_valid() -> None:
     """
     Test valid configuration and contents.
     """
