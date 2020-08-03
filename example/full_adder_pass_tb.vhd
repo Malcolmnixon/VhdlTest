@@ -5,11 +5,11 @@ LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 
 --! Full adder test-bench entity
-ENTITY full_adder_tb IS
-END ENTITY full_adder_tb;
+ENTITY full_adder_pass_tb IS
+END ENTITY full_adder_pass_tb;
 
 --! Full adder test-bench architecture
-ARCHITECTURE tb OF full_adder_tb IS
+ARCHITECTURE tb OF full_adder_pass_tb IS
 
     --! Test bench clock period
     CONSTANT c_clk_period : time := 10 ns;
@@ -19,7 +19,7 @@ ARCHITECTURE tb OF full_adder_tb IS
     SIGNAL b_in  : std_logic; --! B input to full-adder
     SIGNAL c_in  : std_logic; --! Carry input to full-adder
     SIGNAL s_out : std_logic; --! Sum output from full-adder
-    SIGNAL c_out : std_logic; --! Carry output from full_adder
+    SIGNAL c_out : std_logic; --! Carry output from full-adder
     
 BEGIN
 
