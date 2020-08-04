@@ -13,15 +13,14 @@ class GHDL(SimulatorInterface):
 
     """Result parse rules."""
     rules = [
-        (r".*:\d+:\d+: ", ResultLineType.error),
-        (r".*:\(assertion note\):", ResultLineType.execution_note),
-        (r".*:\(report note\):", ResultLineType.execution_note),
-        (r".*:\(assertion warning\):", ResultLineType.execution_warning),
-        (r".*:\(report warning\):", ResultLineType.execution_warning),
-        (r".*:\(assertion error\):", ResultLineType.execution_error),
-        (r".*:\(report error\):", ResultLineType.execution_error),
-        (r".*:\(assertion failure\):", ResultLineType.execution_failure),
-        (r".*:\(report failure\):", ResultLineType.execution_failure)
+        (r".*:\d+:\d+: ", ResultLineType.run_error),
+        (r".*:error:", ResultLineType.run_error),
+        (r".*:\(assertion warning\):", ResultLineType.test_warning),
+        (r".*:\(report warning\):", ResultLineType.test_warning),
+        (r".*:\(assertion error\):", ResultLineType.test_error),
+        (r".*:\(report error\):", ResultLineType.test_error),
+        (r".*:\(assertion failure\):", ResultLineType.test_error),
+        (r".*:\(report failure\):", ResultLineType.test_error)
     ]
 
     def __init__(self) -> None:

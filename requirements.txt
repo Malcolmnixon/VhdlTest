@@ -1,3 +1,11 @@
-sphinx
+# Requires PyYAML to read yaml configuration file
 PyYAML
+
+# Requires colorama to generate colored console output
 colorama
+
+# Requires junit-xml to generate junit output
+junit-xml
+
+# Requires sphinx to generate documentation
+sphinx

@@ -13,12 +13,12 @@ class ActiveHDL(SimulatorInterface):
 
     """Result parse rules."""
     rules = [
-        ("Error: ", ResultLineType.error),
-        ("KERNEL: Warning: ", ResultLineType.warning),
-        ("EXECUTION:: NOTE", ResultLineType.execution_note),
-        ("EXECUTION:: WARNING", ResultLineType.execution_warning),
-        ("EXECUTION:: ERROR", ResultLineType.execution_error),
-        ("EXECUTION:: FAILURE", ResultLineType.execution_failure)
+        ("KERNEL: Warning: ", ResultLineType.run_warning),
+        ("Error: ", ResultLineType.run_error),
+        ("RUNTIME: Fatal Error:", ResultLineType.run_error),
+        ("EXECUTION:: WARNING", ResultLineType.test_warning),
+        ("EXECUTION:: ERROR", ResultLineType.test_error),
+        ("EXECUTION:: FAILURE", ResultLineType.test_error),
     ]
 
     def __init__(self) -> None:
