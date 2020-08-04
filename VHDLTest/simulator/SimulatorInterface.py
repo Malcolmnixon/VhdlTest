@@ -1,4 +1,5 @@
 import subprocess
+from datetime import datetime
 from typing import List, Tuple
 from ..Configuration import Configuration
 from .SimulatorResults import SimulatorResults
@@ -51,19 +52,29 @@ class SimulatorInterface(object):
 
     @staticmethod
     def run_process(args: List[str], rules: List[Tuple[str, ResultLineType]]) -> SimulatorResults:
+        # Capture the start time
+        start = datetime.now()
+
         # Create results
-        results = SimulatorResults()
         try:
             # Run the process and capture the output
             out = subprocess.check_output(args, stderr=subprocess.STDOUT)
+            returncode = 0
         except subprocess.CalledProcessError as err:
-            results.set_exit_code(err.returncode)
             out = err.output
+            returncode = err.returncode
 
-        # Create simulator results and parse output lines
-        results.append_output(
-            out.decode('utf-8').splitlines(),
+        # Calculate the duration
+        end = datetime.now()
+        duration = (end - start).total_seconds()
+
+        # Get the output lines
+        lines = out.decode('utf-8').splitlines()
+
+        # Return the results
+        return SimulatorResults(
+            start,
+            duration,
+            returncode,
+            lines,
             rules)
-
-        # Return parsed output
-        return results

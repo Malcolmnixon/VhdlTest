@@ -1,18 +1,15 @@
+from datetime import datetime
 from VHDLTest.simulator.SimulatorResults import SimulatorResults
 from VHDLTest.simulator.SimulatorResults import ResultLineType
 
 
-def test_empty_results() -> None:
-    res = SimulatorResults()
-    assert res is not None
-    assert len(res.lines) == 0
-
-
 def append_output() -> None:
-    res = SimulatorResults()
+    now = datetime.now()
+    res = SimulatorResults(now, 1.2, 3, ['Hello', 'World'], [])
     assert res is not None
-    assert len(res.lines) == 0
-    res.append_results(['Hello', 'World'], [])
+    assert res.start == now
+    assert res.duration == 1.2
+    assert res.returncode == 3
     assert len(res.lines) == 2
     assert res.lines[0].line_type == ResultLineType.text
     assert res.lines[0].text == 'Hello'
