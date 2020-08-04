@@ -20,6 +20,7 @@
 project = 'VHDLTest'
 copyright = '2020, Malcolm Nixon'
 author = 'Malcolm Nixon'
+master_doc = "index"
 
 # The full version, including alpha/beta/rc tags
 release = '0.0.2'
