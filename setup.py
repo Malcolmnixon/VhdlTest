@@ -7,7 +7,7 @@ with open('README.md', 'r') as fh:
 # Setup information
 setuptools.setup(
     name='VHDLTest',
-    version='0.0.1',
+    version='0.0.2',
     author='Malcolm Nixon',
     description='VHDL Testbench Runner',
     long_description=long_description,
@@ -16,6 +16,11 @@ setuptools.setup(
     packages=setuptools.find_packages(
         exclude=('tests', 'docs')
     ),
+    install_requires=[
+        'PyYAML',
+        'colorama',
+        'junit-xml'
+    ],
     classifiers=[
         'Programming Language :: Python :: 3',
         'License :: OSI Approved :: MIT License',
