@@ -34,7 +34,7 @@ def parse_arguments() -> object:
 
     # Check for version
     if args.version:
-        print('VHDL Testbench Runner (VHDLTest) version 0.0.1')
+        print('VHDL Testbench Runner (VHDLTest) version 0.0.2')
         sys.exit(0)
 
     # Ensure we have a configuration
