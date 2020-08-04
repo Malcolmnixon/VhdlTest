@@ -9,25 +9,10 @@ class ResultLineType(Enum):
     """Result Line Type enumeration."""
 
     text = 0
-    warning = 10
-    error = 11
-    execution_note = 20
-    execution_warning = 21
-    execution_error = 22
-    execution_failure = 23
-
-    @property
-    def is_warning(self) -> bool:
-        """Test if result type is warning."""
-        return (self == ResultLineType.warning
-                or self == ResultLineType.execution_warning)
-
-    @property
-    def is_error(self) -> bool:
-        """Test if result type is error."""
-        return (self == ResultLineType.error
-                or self == ResultLineType.execution_error
-                or self == ResultLineType.execution_failure)
+    run_warning = 1
+    run_error = 2
+    test_warning = 3
+    test_error = 4
 
 
 class ResultLine(object):
@@ -61,17 +46,18 @@ class SimulatorResults(object):
                  start: datetime,
                  duration: float,
                  returncode: int,
-                 lines: List[str],
+                 output: str,
                  rules: List[Tuple[str, ResultLineType]]) -> None:
         """Simulator Results constructor."""
         self._lines = []
         self._start = start
         self._duration = duration
         self._returncode = returncode
+        self._output = output
         self._lines = []
 
         # Process all lines appending output
-        for line in lines:
+        for line in output.splitlines():
             # Look for matching rule
             line_type = None
             for rule in rules:
@@ -95,12 +81,56 @@ class SimulatorResults(object):
         return self._duration
 
     @property
+    def output(self) -> str:
+        return self._output
+
+    @property
     def lines(self) -> List[ResultLine]:
         return self._lines
 
     @property
-    def any_errors(self) -> bool:
-        return self._returncode != 0 or any(line.line_type.is_error for line in self._lines)
+    def error_lines(self) -> List[str]:
+        return [line.text for line in self._lines if line.line_type == ResultLineType.run_error]
+
+    @property
+    def failure_lines(self) -> List[str]:
+        return [line.text for line in self._lines if line.line_type == ResultLineType.test_error]
+
+    @property
+    def error(self) -> bool:
+        return self._returncode != 0 or any(self.error_lines)
+
+    @property
+    def failure(self) -> bool:
+        return self._returncode == 0 and any(self.failure_lines)
+
+    @property
+    def passed(self) -> bool:
+        return not (self.error or self.failure)
+
+    @property
+    def error_message(self) -> str:
+        # If we have run errors then return them
+        run_errors = self.error_lines
+        if run_errors:
+            return '\n'.join(run_errors)
+
+        # If we have a non-zero return code then describe it
+        if self._returncode != 0:
+            return f'Program terminated with returncode {self._returncode}'
+
+        # Could not build a suitable error description
+        return None
+
+    @property
+    def failure_output(self) -> str:
+        # If we have test errors then return them
+        test_errors = self.failure_lines
+        if test_errors:
+            return '\n'.join(test_errors)
+
+        # Could not build a suitable failure output
+        return None
 
     def print(self, log: Log) -> None:
         """
@@ -108,17 +138,13 @@ class SimulatorResults(object):
         """
 
         for line in self._lines:
-            if line.line_type == ResultLineType.warning:
+            if line.line_type == ResultLineType.run_warning:
                 log.write(Log.warning, line.text, Log.end, '\n')
-            elif line.line_type == ResultLineType.error:
+            elif line.line_type == ResultLineType.run_error:
                 log.write(Log.error, line.text, Log.end, '\n')
-            elif line.line_type == ResultLineType.execution_note:
-                log.write(Log.success, line.text, Log.end, '\n')
-            elif line.line_type == ResultLineType.execution_warning:
+            elif line.line_type == ResultLineType.test_warning:
                 log.write(Log.warning, line.text, Log.end, '\n')
-            elif line.line_type == ResultLineType.execution_error:
-                log.write(Log.error, line.text, Log.end, '\n')
-            elif line.line_type == ResultLineType.execution_failure:
+            elif line.line_type == ResultLineType.test_error:
                 log.write(Log.error, line.text, Log.end, '\n')
             else:
                 log.write(line.text, '\n')

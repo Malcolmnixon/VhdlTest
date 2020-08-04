@@ -68,13 +68,10 @@ class SimulatorInterface(object):
         end = datetime.now()
         duration = (end - start).total_seconds()
 
-        # Get the output lines
-        lines = out.decode('utf-8').splitlines()
-
         # Return the results
         return SimulatorResults(
             start,
             duration,
             returncode,
-            lines,
+            out.decode('utf-8'),
             rules)
