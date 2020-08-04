@@ -1,6 +1,8 @@
 import re
+from datetime import datetime
 from typing import List, Tuple
 from enum import Enum
+from ..logger.Log import Log
 
 
 class ResultLineType(Enum):
@@ -55,22 +57,21 @@ class ResultLine(object):
 class SimulatorResults(object):
     """Simulator Results class."""
 
-    def __init__(self) -> None:
+    def __init__(self,
+                 start: datetime,
+                 duration: float,
+                 returncode: int,
+                 lines: List[str],
+                 rules: List[Tuple[str, ResultLineType]]) -> None:
         """Simulator Results constructor."""
         self._lines = []
-        self._exit_code = 0
-
-    def append_output(self, output: List[str], rules: List[Tuple[str, ResultLineType]]) -> None:
-        """
-        Append console output to simulator results.
-
-        Args:
-            output (List[str]): Output lines to append
-            rules (List[Tuple[str, ResultLineType]]): List of parse rules
-        """
+        self._start = start
+        self._duration = duration
+        self._returncode = returncode
+        self._lines = []
 
         # Process all lines appending output
-        for line in output:
+        for line in lines:
             # Look for matching rule
             line_type = None
             for rule in rules:
@@ -81,9 +82,17 @@ class SimulatorResults(object):
             # Append the line
             self._lines.append(ResultLine(line_type or ResultLineType.text, line))
 
-    def set_exit_code(self, code: int) -> None:
-        """Set the exit code of the process creating results."""
-        self._exit_code = code
+    @property
+    def returncode(self) -> int:
+        return self._returncode
+
+    @property
+    def start(self) -> datetime:
+        return self._start
+
+    @property
+    def duration(self) -> float:
+        return self._duration
 
     @property
     def lines(self) -> List[ResultLine]:
@@ -91,12 +100,25 @@ class SimulatorResults(object):
 
     @property
     def any_errors(self) -> bool:
-        return self._exit_code != 0 or any(line.line_type.is_error for line in self._lines)
+        return self._returncode != 0 or any(line.line_type.is_error for line in self._lines)
 
-    def print(self) -> None:
+    def print(self, log: Log) -> None:
         """
         Print results.
         """
 
         for line in self._lines:
-            print(line.text)
+            if line.line_type == ResultLineType.warning:
+                log.write(Log.warning, line.text, Log.end, '\n')
+            elif line.line_type == ResultLineType.error:
+                log.write(Log.error, line.text, Log.end, '\n')
+            elif line.line_type == ResultLineType.execution_note:
+                log.write(Log.success, line.text, Log.end, '\n')
+            elif line.line_type == ResultLineType.execution_warning:
+                log.write(Log.warning, line.text, Log.end, '\n')
+            elif line.line_type == ResultLineType.execution_error:
+                log.write(Log.error, line.text, Log.end, '\n')
+            elif line.line_type == ResultLineType.execution_failure:
+                log.write(Log.error, line.text, Log.end, '\n')
+            else:
+                log.write(line.text, '\n')
