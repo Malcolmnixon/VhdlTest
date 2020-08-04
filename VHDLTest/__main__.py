@@ -132,7 +132,7 @@ def emit_junit(log: Log,
 def print_summary(log: Log,
                   config: Configuration,
                   results: Dict[str, SimulatorResults],
-                  elapsed_duration: float) -> None:
+                  elapsed_duration: float) -> bool:
 
     # Print summary list
     log.write('==== Summary ========================================\n')
@@ -168,6 +168,9 @@ def print_summary(log: Log,
     # Print final warning if any failed
     if total_failed != 0:
         log.write(Log.error, 'Some failed!', Log.end, '\n')
+
+    # Return true if none failed
+    return total_failed == 0
 
 
 def main() -> None:
@@ -210,7 +213,9 @@ def main() -> None:
         emit_junit(log, config, results, args.junit)
 
     # Print summary list
-    print_summary(log, config, results, elapsed_duration)
+    passed = print_summary(log, config, results, elapsed_duration)
+    if not passed:
+        sys.exit(1)
 
 
 if __name__ == '__main__':
