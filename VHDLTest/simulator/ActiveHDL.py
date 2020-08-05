@@ -13,21 +13,24 @@ class ActiveHDL(SimulatorInterface):
 
     """Compile parse rules."""
     compile_rules = [
-        ("KERNEL: Warning: ", RunCategory.WARNING),
-        ("Error: ", RunCategory.ERROR),
-        ("RUNTIME: Fatal Error:", RunCategory.ERROR)
+        (r"KERNEL:\s*Warning:", RunCategory.WARNING),
+        (r"Error:", RunCategory.ERROR),
+        (r"RUNTIME:\s*Fatal Error", RunCategory.ERROR)
     ]
 
     """Test results parse rules."""
     test_rules = [
-        ("KERNEL: Warning: You are using the Active-HDL Lattice Edition", RunCategory.TEXT),
-        ("KERNEL: Warning: Contact Aldec for available upgrade options", RunCategory.TEXT),
-        ("KERNEL: Warning: ", RunCategory.WARNING),
-        ("KERNEL: WARNING: ", RunCategory.WARNING),
-        ("EXECUTION:: NOTE", RunCategory.INFO),
-        ("EXECUTION:: WARNING", RunCategory.WARNING),
-        ("EXECUTION:: ERROR", RunCategory.ERROR),
-        ("EXECUTION:: FAILURE", RunCategory.ERROR)
+        (r"KERNEL:\s*Warning:\s*You are using the Active-HDL Lattice Edition", RunCategory.TEXT),
+        (r"KERNEL:\s*Warning:\s*Contact Aldec for available upgrade options", RunCategory.TEXT),
+        (r"KERNEL:\s*Warning:", RunCategory.WARNING),
+        (r"KERNEL:\s*WARNING:", RunCategory.WARNING),
+        (r"EXECUTION::\s*NOTE", RunCategory.INFO),
+        (r"EXECUTION::\s*WARNING", RunCategory.WARNING),
+        (r"EXECUTION::\s*ERROR", RunCategory.ERROR),
+        (r"EXECUTION::\s*FAILURE", RunCategory.ERROR),
+        (r"KERNEL:\s*ERROR", RunCategory.ERROR),
+        (r"RUNTIME:\s*Fatal Error:", RunCategory.ERROR),
+        (r"VSIM:\s*Error:", RunCategory.ERROR)
     ]
 
     def __init__(self) -> None:

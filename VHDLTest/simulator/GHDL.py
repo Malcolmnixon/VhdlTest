@@ -26,7 +26,8 @@ class GHDL(SimulatorInterface):
         (r".*:\(assertion error\):", RunCategory.ERROR),
         (r".*:\(report error\):", RunCategory.ERROR),
         (r".*:\(assertion failure\):", RunCategory.ERROR),
-        (r".*:\(report failure\):", RunCategory.ERROR)
+        (r".*:\(report failure\):", RunCategory.ERROR),
+        (r".*:error:", RunCategory.ERROR)
     ]
 
     def __init__(self) -> None:
