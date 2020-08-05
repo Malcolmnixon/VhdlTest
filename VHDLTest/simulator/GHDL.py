@@ -39,7 +39,7 @@ class GHDL(SimulatorInterface):
         path = os.getenv('VHDLTEST_GHDL_PATH')
         if path is not None:
             return path
-        
+
         # Find ghdl executable
         path = shutil.which('ghdl')
         if path is None:
