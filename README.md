@@ -2,27 +2,27 @@
 
 # VHDL Testbench Runner
 This python module runs VHDL testbenches and generates a report of the results.
-More information is available on the 
-[website](https://vhdltest.readthedocs.io/en/latest/).
+The project [website](https://vhdltest.readthedocs.io/en/latest/) contains more detailed information.
 
-# Supported Simulators
+
+## Supported Simulators
 It requires a VHDL Simulator be installed on the system. Supported simulators are:
 - [GHDL](http://ghdl.free.fr/)
 - [Aldec Active-HDL](https://www.aldec.com/en/products/fpga_simulation/active-hdl)
 
-# Installation
+## Installation
 VHDL Testbench Runner can be installed by running:
 ```
 python -m pip install VHDLTest
 ```
 
-# Running
+## Running
 VHDL Testbench Runner can be run by;
 ```
 python -m VHDLTest -c config.yaml
 ```
 
-# Configuring
+## Configuring
 VHDL Testbench Runner requires a yaml configuration file to specify the project.
 The yaml file lists the VHDL source files and the testbenches to execute.
 ```
