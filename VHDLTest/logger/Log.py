@@ -8,6 +8,7 @@ class Log(object):
     # Simple access to LogItem types
     end = LogItem.END
     success = LogItem.SUCCESS
+    info = LogItem.INFO
     warning = LogItem.WARNING
     error = LogItem.ERROR
 

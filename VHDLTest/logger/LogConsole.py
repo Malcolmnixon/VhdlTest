@@ -19,6 +19,8 @@ class LogConsole(LogWriter):
                     print(colorama.Style.RESET_ALL, end='')
                 elif item == LogItem.SUCCESS:
                     print(colorama.Style.BRIGHT + colorama.Fore.GREEN, end='')
+                elif item == LogItem.INFO:
+                    print(colorama.Style.BRIGHT + colorama.Fore.WHITE, end='')
                 elif item == LogItem.WARNING:
                     print(colorama.Style.BRIGHT + colorama.Fore.YELLOW, end='')
                 elif item == LogItem.ERROR:
