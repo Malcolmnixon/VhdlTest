@@ -36,13 +36,18 @@ class ActiveHDL(SimulatorInterface):
 
     @classmethod
     def find_path(cls) -> str:
+        # First check environment variable
+        path = os.getenv('VHDLTEST_ACTIVEHDL_PATH')
+        if path is not None:
+            return path
+
         # Find vsimsa executable
-        vsimsa_path = shutil.which('vsimsa')
-        if vsimsa_path is None:
+        path = shutil.which('vsimsa')
+        if path is None:
             return None
 
         # Return directory name
-        return os.path.dirname(vsimsa_path)
+        return os.path.dirname(path)
 
     def compile(self, config: Configuration) -> RunResults:
         # Create the directory
@@ -59,7 +64,7 @@ class ActiveHDL(SimulatorInterface):
 
         # Run the compile
         return RunResults.run([
-            'vsimsa',
+            f'{self._path}/vsimsa',
             '-do',
             'VHDLTest.out/ActiveHDL/compile.do'],
             ActiveHDL.compile_rules)
@@ -76,7 +81,7 @@ class ActiveHDL(SimulatorInterface):
 
         # Run the test
         return RunResults.run([
-            'vsimsa',
+            f'{self._path}/vsimsa',
             '-do',
             'VHDLTest.out/ActiveHDL/test.do'],
             ActiveHDL.test_rules)

@@ -35,13 +35,18 @@ class GHDL(SimulatorInterface):
 
     @classmethod
     def find_path(cls) -> str:
+        # First check environment variable
+        path = os.getenv('VHDLTEST_GHDL_PATH')
+        if path is not None:
+            return path
+
         # Find ghdl executable
-        ghdl_path = shutil.which('ghdl')
-        if ghdl_path is None:
+        path = shutil.which('ghdl')
+        if path is None:
             return None
 
         # Return directory name
-        return os.path.dirname(ghdl_path)
+        return os.path.dirname(path)
 
     def compile(self, config: Configuration) -> RunResults:
         # Create the directory
@@ -55,7 +60,7 @@ class GHDL(SimulatorInterface):
 
         # Run the compile
         return RunResults.run([
-            'ghdl',
+            f'{self._path}/ghdl',
             '-a',
             '--std=08',
             '--workdir=VHDLTest.out/GHDL',
@@ -65,7 +70,7 @@ class GHDL(SimulatorInterface):
     def test(self, config: Configuration, test: str) -> RunResults:
         # Run the test
         return RunResults.run([
-            'ghdl',
+            f'{self._path}/ghdl',
             '-r',
             '--std=08',
             '--workdir=VHDLTest.out/GHDL',

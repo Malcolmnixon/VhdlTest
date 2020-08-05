@@ -43,3 +43,12 @@ Options
 .. option:: --version
 
    Print the version information.
+
+Environment Variables
+---------------------
+
+VHDLTest will look for simulators in the path environment variable. It also
+supports explicitly setting the simulator paths using environment variables:
+
+- VHDLTEST_ACTIVEHDL_PATH=<path-to-bin>
+- VHDLTEST_GHDL_PATH=<path-to-bin>
