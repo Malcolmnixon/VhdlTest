@@ -98,12 +98,19 @@ class RunResults(object):
         # Join into single line
         return '\n'.join(errors)
 
-    def print(self, log: Log) -> None:
+    def print(self,
+              log: Log,
+              level: RunCategory = RunCategory.TEXT) -> None:
         """
         Print results.
         """
 
         for line in self.lines:
+            # Skip lines below the level threshold
+            if line.category.value < level.value:
+                continue
+
+            # Log the lines with suitable coloring
             if line.category == RunCategory.INFO:
                 log.write(Log.info, line.text, Log.end, '\n')
             elif line.category == RunCategory.WARNING:

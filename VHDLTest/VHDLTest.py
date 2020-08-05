@@ -5,6 +5,7 @@ from datetime import datetime
 from .simulator.SimulatorFactory import SimulatorFactory
 from .Configuration import Configuration
 from .logger.Log import Log
+from .runner.RunResults import RunCategory
 
 
 class VHDLTest(object):
@@ -62,8 +63,8 @@ class VHDLTest(object):
         self._compile_result = self._simulator.compile(self._config)
 
         # Print compile log on verbose or compile warning/error
-        if self._args.verbose or self._compile_result.warning:
-            self._compile_result.print(self._log)
+        level = RunCategory.TEXT if self._args.verbose or self._compile_result.warning else RunCategory.INFO
+        self._compile_result.print(self._log, level)
 
         # On compile error write error message
         if self._compile_result.error:
@@ -91,6 +92,10 @@ class VHDLTest(object):
             self._test_results[test] = result
             self._total_duration += result.duration
 
+            # Print test log on verbose or test warning/error
+            level = RunCategory.TEXT if self._args.verbose or result.warning else RunCategory.INFO
+            result.print(self._log, level)
+
             # Log the result
             if result.error:
                 self._log.write(Log.error, 'fail ', Log.end, f'{test} ({result.duration:.1f} seconds)\n')
@@ -98,11 +103,6 @@ class VHDLTest(object):
             else:
                 self._log.write(Log.success, 'pass ', Log.end, f'{test} ({result.duration:.1f} seconds)\n')
                 self._test_passed += 1
-
-            # Print test log on verbose or test warning/error
-            if self._args.verbose or result.warning:
-                self._log.write('\n')
-                result.print(self._log)
 
             # Add separator after test
             self._log.write('\n')
