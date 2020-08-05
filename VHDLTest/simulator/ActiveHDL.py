@@ -1,9 +1,9 @@
 import os
 import shutil
 from .SimulatorInterface import SimulatorInterface
-from .SimulatorResults import SimulatorResults
-from .SimulatorResults import ResultLineType
 from ..Configuration import Configuration
+from ..runner.RunResults import RunCategory
+from ..runner.RunResults import RunResults
 
 
 class ActiveHDL(SimulatorInterface):
@@ -11,14 +11,23 @@ class ActiveHDL(SimulatorInterface):
     ActiveHDL Simulator class.
     """
 
-    """Result parse rules."""
-    rules = [
-        ("KERNEL: Warning: ", ResultLineType.run_warning),
-        ("Error: ", ResultLineType.run_error),
-        ("RUNTIME: Fatal Error:", ResultLineType.run_error),
-        ("EXECUTION:: WARNING", ResultLineType.test_warning),
-        ("EXECUTION:: ERROR", ResultLineType.test_error),
-        ("EXECUTION:: FAILURE", ResultLineType.test_error),
+    """Compile parse rules."""
+    compile_rules = [
+        ("KERNEL: Warning: ", RunCategory.WARNING),
+        ("Error: ", RunCategory.ERROR),
+        ("RUNTIME: Fatal Error:", RunCategory.ERROR)
+    ]
+
+    """Test results parse rules."""
+    test_rules = [
+        ("KERNEL: Warning: You are using the Active-HDL Lattice Edition", RunCategory.TEXT),
+        ("KERNEL: Warning: Contact Aldec for available upgrade options", RunCategory.TEXT),
+        ("KERNEL: Warning: ", RunCategory.WARNING),
+        ("KERNEL: WARNING: ", RunCategory.WARNING),
+        ("EXECUTION:: NOTE", RunCategory.INFO),
+        ("EXECUTION:: WARNING", RunCategory.WARNING),
+        ("EXECUTION:: ERROR", RunCategory.ERROR),
+        ("EXECUTION:: FAILURE", RunCategory.ERROR)
     ]
 
     def __init__(self) -> None:
@@ -35,7 +44,7 @@ class ActiveHDL(SimulatorInterface):
         # Return directory name
         return os.path.dirname(vsimsa_path)
 
-    def compile(self, config: Configuration) -> SimulatorResults:
+    def compile(self, config: Configuration) -> RunResults:
         # Create the directory
         if not os.path.isdir('VHDLTest.out/ActiveHDL'):
             os.makedirs('VHDLTest.out/ActiveHDL')
@@ -49,13 +58,13 @@ class ActiveHDL(SimulatorInterface):
                 stream.write(f'acom -2008 -dbg {file}\n')
 
         # Run the compile
-        return SimulatorInterface.run_process([
+        return RunResults.run([
             'vsimsa',
             '-do',
             'VHDLTest.out/ActiveHDL/compile.do'],
-            ActiveHDL.rules)
+            ActiveHDL.compile_rules)
 
-    def test(self, config: Configuration, test: str) -> SimulatorResults:
+    def test(self, config: Configuration, test: str) -> RunResults:
         # Write the test script
         with open('VHDLTest.out/ActiveHDL/test.do', 'w') as stream:
             stream.write('onerror {exit -code 1}\n')
@@ -66,8 +75,8 @@ class ActiveHDL(SimulatorInterface):
             stream.write('exit -code 0\n')
 
         # Run the test
-        return SimulatorInterface.run_process([
+        return RunResults.run([
             'vsimsa',
             '-do',
             'VHDLTest.out/ActiveHDL/test.do'],
-            ActiveHDL.rules)
+            ActiveHDL.test_rules)

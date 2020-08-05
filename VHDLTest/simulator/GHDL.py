@@ -1,8 +1,8 @@
 import os
 import shutil
 from .SimulatorInterface import SimulatorInterface
-from .SimulatorResults import SimulatorResults
-from .SimulatorResults import ResultLineType
+from ..runner.RunResults import RunCategory
+from ..runner.RunResults import RunResults
 from ..Configuration import Configuration
 
 
@@ -11,16 +11,22 @@ class GHDL(SimulatorInterface):
     GHDL Simulator class.
     """
 
-    """Result parse rules."""
-    rules = [
-        (r".*:\d+:\d+: ", ResultLineType.run_error),
-        (r".*:error:", ResultLineType.run_error),
-        (r".*:\(assertion warning\):", ResultLineType.test_warning),
-        (r".*:\(report warning\):", ResultLineType.test_warning),
-        (r".*:\(assertion error\):", ResultLineType.test_error),
-        (r".*:\(report error\):", ResultLineType.test_error),
-        (r".*:\(assertion failure\):", ResultLineType.test_error),
-        (r".*:\(report failure\):", ResultLineType.test_error)
+    """Compile results parse rules."""
+    compile_rules = [
+        (r".*:\d+:\d+: ", RunCategory.ERROR),
+        (r".*:error:", RunCategory.ERROR)
+    ]
+
+    """Test results parse rules."""
+    test_rules = [
+        (r".*:\(assertion note\):", RunCategory.INFO),
+        (r".*:\(report note\):", RunCategory.INFO),
+        (r".*:\(assertion warning\):", RunCategory.WARNING),
+        (r".*:\(report warning\):", RunCategory.WARNING),
+        (r".*:\(assertion error\):", RunCategory.ERROR),
+        (r".*:\(report error\):", RunCategory.ERROR),
+        (r".*:\(assertion failure\):", RunCategory.ERROR),
+        (r".*:\(report failure\):", RunCategory.ERROR)
     ]
 
     def __init__(self) -> None:
@@ -37,7 +43,7 @@ class GHDL(SimulatorInterface):
         # Return directory name
         return os.path.dirname(ghdl_path)
 
-    def compile(self, config: Configuration) -> SimulatorResults:
+    def compile(self, config: Configuration) -> RunResults:
         # Create the directory
         if not os.path.isdir('VHDLTest.out/GHDL'):
             os.makedirs('VHDLTest.out/GHDL')
@@ -48,20 +54,20 @@ class GHDL(SimulatorInterface):
                 stream.write(f'{file}\n')
 
         # Run the compile
-        return SimulatorInterface.run_process([
+        return RunResults.run([
             'ghdl',
             '-a',
             '--std=08',
             '--workdir=VHDLTest.out/GHDL',
             '@VHDLTest.out/GHDL/compile.rsp'],
-            GHDL.rules)
+            GHDL.compile_rules)
 
-    def test(self, config: Configuration, test: str) -> SimulatorResults:
+    def test(self, config: Configuration, test: str) -> RunResults:
         # Run the test
-        return SimulatorInterface.run_process([
+        return RunResults.run([
             'ghdl',
             '-r',
             '--std=08',
             '--workdir=VHDLTest.out/GHDL',
             test],
-            GHDL.rules)
+            GHDL.test_rules)

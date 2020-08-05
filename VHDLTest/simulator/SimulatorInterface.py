@@ -1,9 +1,5 @@
-import subprocess
-from datetime import datetime
-from typing import List, Tuple
 from ..Configuration import Configuration
-from .SimulatorResults import SimulatorResults
-from .SimulatorResults import ResultLineType
+from ..runner.RunResults import RunResults
 
 
 class SimulatorInterface(object):
@@ -40,38 +36,8 @@ class SimulatorInterface(object):
     def find_path(cls) -> str:
         """Find the path to the simulator."""
 
-    def compile(self, config: Configuration) -> SimulatorResults:
+    def compile(self, config: Configuration) -> RunResults:
         """Compile the VHDL files into a library."""
 
-    def test(self, config: Configuration, test: str) -> SimulatorResults:
+    def test(self, config: Configuration, test: str) -> RunResults:
         """Execute a single test."""
-
-    def test_all(self, config: Configuration) -> List[SimulatorResults]:
-        """Run all configured tests."""
-        return [(test, self.test(config, test)) for test in config.tests]
-
-    @staticmethod
-    def run_process(args: List[str], rules: List[Tuple[str, ResultLineType]]) -> SimulatorResults:
-        # Capture the start time
-        start = datetime.now()
-
-        # Create results
-        try:
-            # Run the process and capture the output
-            out = subprocess.check_output(args, stderr=subprocess.STDOUT)
-            returncode = 0
-        except subprocess.CalledProcessError as err:
-            out = err.output
-            returncode = err.returncode
-
-        # Calculate the duration
-        end = datetime.now()
-        duration = (end - start).total_seconds()
-
-        # Return the results
-        return SimulatorResults(
-            start,
-            duration,
-            returncode,
-            out.decode('utf-8'),
-            rules)
