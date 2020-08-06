@@ -41,16 +41,21 @@ class GHDL(SimulatorBase):
         """Find the path to GHDL binary."""
         # First check environment variable
         path = os.getenv('VHDLTEST_GHDL_PATH')
-        if path is not None:
+        if path:
             return path
 
         # Find ghdl executable
         path = shutil.which('ghdl')
-        if path is None:
-            return None
+        if not path:
+            return ''
 
         # Return directory name
         return os.path.dirname(path)
+
+    @classmethod
+    def create(cls) -> SimulatorBase:
+        """Create an instance of the GHDL simulator."""
+        return GHDL()
 
     def compile(self, config: Configuration) -> RunResults:
         """

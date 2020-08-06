@@ -7,16 +7,13 @@ from VHDLTest.Configuration import Configuration
 def test_load_missing() -> None:
     """Test missing configuration."""
     with pytest.raises(RuntimeError):
-        conf = Configuration('tests/configurations/missing.yaml')
-        assert conf is None
+        Configuration('tests/configurations/missing.yaml')
 
 
 def test_load_empty() -> None:
     """Test empty configuration."""
-    conf = Configuration('tests/configurations/empty.yaml')
-    assert conf is not None
-    assert len(conf.files) == 0
-    assert len(conf.tests) == 0
+    with pytest.raises(RuntimeError):
+        Configuration('tests/configurations/empty.yaml')
 
 
 def test_load_valid() -> None:

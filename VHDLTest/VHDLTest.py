@@ -2,16 +2,25 @@
 
 import argparse
 import sys
+from typing import Optional, Dict
 from junit_xml import TestSuite, TestCase
 from datetime import datetime
+from .simulator.SimulatorBase import SimulatorBase
 from .simulator.SimulatorFactory import SimulatorFactory
 from .Configuration import Configuration
 from .logger.Log import Log
 from .runner.RunResults import RunCategory
+from .runner.RunResults import RunResults
 
 
 class VHDLTest(object):
     """VHDLTest application class."""
+
+    _log: Optional[Log]
+    _config: Optional[Configuration]
+    _simulator: Optional[SimulatorBase]
+    _compile_result: Optional[RunResults]
+    _test_result: Dict[str, RunResults]
 
     # VHDLTest version
     version = "0.0.3"
@@ -22,8 +31,8 @@ class VHDLTest(object):
         self._log = None
         self._config = None
         self._simulator = None
-        self._compile_results = None
-        self._test_results = None
+        self._compile_result = None
+        self._test_results = {}
         self._test_count = 0
         self._test_passed = 0
         self._test_failed = 0

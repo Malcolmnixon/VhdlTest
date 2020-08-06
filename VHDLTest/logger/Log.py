@@ -1,6 +1,7 @@
 """Module for Log class."""
 
-from typing import Any
+from typing import Any, List
+from .LogWriter import LogWriter
 from .LogConsole import LogConsole
 from .LogFile import LogFile
 from .LogItem import LogItem
@@ -8,6 +9,8 @@ from .LogItem import LogItem
 
 class Log(object):
     """Log class to manage logging."""
+
+    _loggers: List[LogWriter]
 
     # Simple access to LogItem types
     end = LogItem.END
