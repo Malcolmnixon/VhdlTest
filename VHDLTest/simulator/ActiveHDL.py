@@ -42,16 +42,21 @@ class ActiveHDL(SimulatorBase):
         """Find the path to Active-HDL binaries."""
         # First check environment variable
         path = os.getenv('VHDLTEST_ACTIVEHDL_PATH')
-        if path is not None:
+        if path:
             return path
 
         # Find vsimsa executable
         path = shutil.which('vsimsa')
-        if path is None:
-            return None
+        if not path:
+            return ''
 
         # Return directory name
         return os.path.dirname(path)
+
+    @classmethod
+    def create(cls) -> SimulatorBase:
+        """Create an instance of the Active-HDL simulator."""
+        return ActiveHDL()
 
     def compile(self, config: Configuration) -> RunResults:
         """

@@ -1,5 +1,6 @@
 """Tests for GHDL output parsing."""
 
+from datetime import datetime
 from VHDLTest.simulator.GHDL import GHDL
 from VHDLTest.runner.RunResults import RunResults
 from VHDLTest.runner.RunResults import RunCategory
@@ -39,7 +40,7 @@ def test_ghdl_compile_rules() -> None:
     text = '\n'.join(lines)
 
     # Parse the text using the GHDL compile rules
-    results = RunResults(None, 1.0, 0, text, GHDL.compile_rules)
+    results = RunResults(datetime.now(), 1.0, 0, text, GHDL.compile_rules)
 
     assert len(results.lines) == count
     for i in range(count):
@@ -57,7 +58,7 @@ def test_ghdl_test_rules() -> None:
     text = '\n'.join(lines)
 
     # Parse the text using the GHDL test rules
-    results = RunResults(None, 1.0, 0, text, GHDL.test_rules)
+    results = RunResults(datetime.now(), 1.0, 0, text, GHDL.test_rules)
 
     assert len(results.lines) == count
     for i in range(count):

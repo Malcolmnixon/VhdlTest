@@ -1,5 +1,6 @@
 """Tests for Active-HDL output parsing."""
 
+from datetime import datetime
 from VHDLTest.simulator.ActiveHDL import ActiveHDL
 from VHDLTest.runner.RunResults import RunResults
 from VHDLTest.runner.RunResults import RunCategory
@@ -38,7 +39,7 @@ def test_activehdl_compile_rules() -> None:
     text = '\n'.join(lines)
 
     # Parse the text using the Active-HDL compile rules
-    results = RunResults(None, 1.0, 0, text, ActiveHDL.compile_rules)
+    results = RunResults(datetime.now(), 1.0, 0, text, ActiveHDL.compile_rules)
 
     assert len(results.lines) == count
     for i in range(count):
@@ -56,7 +57,7 @@ def test_activehdl_test_rules() -> None:
     text = '\n'.join(lines)
 
     # Parse the text using the Active-HDL test rules
-    results = RunResults(None, 1.0, 0, text, ActiveHDL.test_rules)
+    results = RunResults(datetime.now(), 1.0, 0, text, ActiveHDL.test_rules)
 
     assert len(results.lines) == count
     for i in range(count):

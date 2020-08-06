@@ -1,7 +1,11 @@
 """Module for SimulatorBase class."""
 
+from typing import TypeVar
 from ..Configuration import Configuration
 from ..runner.RunResults import RunResults
+
+
+T = TypeVar('T', bound='SimulatorBase')
 
 
 class SimulatorBase(object):
@@ -30,11 +34,16 @@ class SimulatorBase(object):
     @classmethod
     def is_available(cls) -> bool:
         """Test if the simulator is available."""
-        return cls.find_path() is not None
+        return bool(cls.find_path())
 
     @classmethod
     def find_path(cls) -> str:
         """Find the path to the simulator."""
+        raise NotImplementedError
+
+    @classmethod
+    def create(cls) -> T:
+        """Create an instance of the simulator."""
         raise NotImplementedError
 
     def compile(self, config: Configuration) -> RunResults:
