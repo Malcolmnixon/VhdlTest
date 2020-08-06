@@ -13,8 +13,10 @@ class GHDL(SimulatorInterface):
 
     """Compile results parse rules."""
     compile_rules = [
+        (r".*:\d+:\d+:warning:", RunCategory.WARNING),
         (r".*:\d+:\d+: ", RunCategory.ERROR),
-        (r".*:error:", RunCategory.ERROR)
+        (r".*:error:", RunCategory.ERROR),
+        (r".*: cannot open", RunCategory.ERROR)
     ]
 
     """Test results parse rules."""
