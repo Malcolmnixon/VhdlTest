@@ -1,3 +1,5 @@
+"""Tests for GHDL output parsing."""
+
 from VHDLTest.simulator.GHDL import GHDL
 from VHDLTest.runner.RunResults import RunResults
 from VHDLTest.runner.RunResults import RunCategory
@@ -28,10 +30,7 @@ ghdl_test_patterns = [
 
 
 def test_ghdl_compile_rules() -> None:
-    """
-    Test parsing GHDL compile output.
-    """
-
+    """Test parsing GHDL compile output."""
     # Get the count, categories, and lines of the test input
     count = len(ghdl_compile_patterns)
     categories, lines = zip(*ghdl_compile_patterns)
@@ -49,10 +48,7 @@ def test_ghdl_compile_rules() -> None:
 
 
 def test_ghdl_test_rules() -> None:
-    """
-    Test parsing GHDL test output.
-    """
-
+    """Test parsing GHDL test output."""
     # Get the count, categories, and lines of the test input
     count = len(ghdl_test_patterns)
     categories, lines = zip(*ghdl_test_patterns)

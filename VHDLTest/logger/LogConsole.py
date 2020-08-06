@@ -1,3 +1,5 @@
+"""Module for LogConsole class."""
+
 from typing import Any
 import colorama
 from .LogWriter import LogWriter
@@ -5,14 +7,23 @@ from .LogItem import LogItem
 
 
 class LogConsole(LogWriter):
+    """Log Writer for writing to console."""
 
     def __init__(self) -> None:
+        """Initialize new LogConsole instance."""
         colorama.init()
 
     def close(self) -> None:
+        """Close LogConsole."""
         pass
 
     def write(self, *items: Any) -> None:
+        """
+        Write items to console.
+
+        Args:
+            items: Content to write to console.
+        """
         for item in items:
             if type(item) is LogItem:
                 if item == LogItem.END:

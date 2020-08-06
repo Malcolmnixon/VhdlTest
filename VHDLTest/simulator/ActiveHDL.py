@@ -1,15 +1,15 @@
+"""Module for the Active-HDL simulator class."""
+
 import os
 import shutil
-from .SimulatorInterface import SimulatorInterface
+from .SimulatorBase import SimulatorBase
 from ..Configuration import Configuration
 from ..runner.RunResults import RunCategory
 from ..runner.RunResults import RunResults
 
 
-class ActiveHDL(SimulatorInterface):
-    """
-    ActiveHDL Simulator class.
-    """
+class ActiveHDL(SimulatorBase):
+    """ActiveHDL Simulator class."""
 
     """Compile parse rules."""
     compile_rules = [
@@ -34,11 +34,12 @@ class ActiveHDL(SimulatorInterface):
     ]
 
     def __init__(self) -> None:
-        """ActiveHDL Simulator constructor."""
+        """Initialize a new ActiveHDL instance."""
         super().__init__('ActiveHDL')
 
     @classmethod
     def find_path(cls) -> str:
+        """Find the path to Active-HDL binaries."""
         # First check environment variable
         path = os.getenv('VHDLTEST_ACTIVEHDL_PATH')
         if path is not None:
@@ -53,6 +54,12 @@ class ActiveHDL(SimulatorInterface):
         return os.path.dirname(path)
 
     def compile(self, config: Configuration) -> RunResults:
+        """
+        Compile VHDL source using Active-HDL compiler.
+
+        Args:
+            config (Configuration): Configuration data for compile.
+        """
         # Create the directory
         if not os.path.isdir('VHDLTest.out/ActiveHDL'):
             os.makedirs('VHDLTest.out/ActiveHDL')
@@ -73,6 +80,13 @@ class ActiveHDL(SimulatorInterface):
             ActiveHDL.compile_rules)
 
     def test(self, config: Configuration, test: str) -> RunResults:
+        """
+        Execute a test-bench using Active-HDL simulator.
+
+        Args:
+            config (Configuration): Configuration data for test.
+            test (str): Name of test-bench.
+        """
         # Write the test script
         with open('VHDLTest.out/ActiveHDL/test.do', 'w') as stream:
             stream.write('onerror {exit -code 1}\n')

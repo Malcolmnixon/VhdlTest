@@ -1,3 +1,5 @@
+"""Module for VHDLTest Configuration class."""
+
 from typing import List
 import os
 import yaml
@@ -8,12 +10,11 @@ class Configuration(object):
 
     def __init__(self, filename: str) -> None:
         """
-        Configuration constructor.
+        Initialize a new Configuration instance.
 
         Args:
             filename (str): YAML configuration file name.
         """
-
         # Fail if file doesn't exist
         if not os.path.isfile(filename):
             raise RuntimeError(f'Configuration file {filename} not found.')
@@ -27,21 +28,15 @@ class Configuration(object):
 
     @property
     def doc(self) -> object:
-        """
-        Gets the YAML document.
-        """
+        """Get the YAML document."""
         return self._doc or {}
 
     @property
     def files(self) -> List[str]:
-        """
-        Gets the files mentioned in the configuration.
-        """
+        """Get the files mentioned in the configuration."""
         return self.doc.get('files') or []
 
     @property
     def tests(self) -> List[str]:
-        """
-        Gets the tests mentioned in the configuration.
-        """
+        """Get the tests mentioned in the configuration."""
         return self.doc.get('tests') or []

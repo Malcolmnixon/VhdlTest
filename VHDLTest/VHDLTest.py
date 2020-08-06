@@ -1,3 +1,5 @@
+"""Module for VHDLTest application class."""
+
 import argparse
 import sys
 from junit_xml import TestSuite, TestCase
@@ -9,10 +11,13 @@ from .runner.RunResults import RunCategory
 
 
 class VHDLTest(object):
+    """VHDLTest application class."""
+
     # VHDLTest version
     version = "0.0.3"
 
     def __init__(self) -> None:
+        """Initialize a new VHDLTest instance."""
         self._args = None
         self._log = None
         self._config = None
@@ -26,6 +31,7 @@ class VHDLTest(object):
         self._elapsed_duration = 0.0
 
     def parse_arguments(self) -> None:
+        """Parse command-line arguments into _args."""
         # Construct the argument parser
         parser = argparse.ArgumentParser(
             prog='VHDL Testbench Runner (VHDLTest)',
@@ -58,6 +64,7 @@ class VHDLTest(object):
             sys.exit(1)
 
     def compile_source(self) -> None:
+        """Compile VHDL source files into library."""
         # Compile the code
         self._log.write(f'Compiling files using {self._simulator.name}...\n')
         self._compile_result = self._simulator.compile(self._config)
@@ -78,6 +85,7 @@ class VHDLTest(object):
         self._log.write(Log.success, 'done', Log.end, '\n\n')
 
     def run_tests(self) -> None:
+        """Run VHDL test benches and gather results."""
         # Run the tests
         self._test_results = {}
         self._test_passed = 0
@@ -108,6 +116,7 @@ class VHDLTest(object):
             self._log.write('\n')
 
     def emit_junit(self) -> None:
+        """Emit JUnit report file containing test results."""
         # Print generating message
         self._log.write(f'Generating JUnit output {self._args.junit}\n')
 
@@ -140,6 +149,7 @@ class VHDLTest(object):
         self._log.write(Log.success, 'done', Log.end, '\n\n')
 
     def print_summary(self) -> None:
+        """Print test summary information to log."""
         # Print summary list
         self._log.write('==== Summary ========================================\n')
         for test in self._config.tests:
@@ -169,6 +179,7 @@ class VHDLTest(object):
             self._log.write(Log.error, 'Some failed!', Log.end, '\n')
 
     def run(self) -> None:
+        """Run all VHDLTest steps."""
         # Parse arguments
         self.parse_arguments()
 
