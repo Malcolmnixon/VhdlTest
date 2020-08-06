@@ -1,3 +1,5 @@
+"""Module for RunResults class and support types."""
+
 import subprocess
 import re
 from datetime import datetime
@@ -7,6 +9,8 @@ from ..logger.Log import Log
 
 
 class RunCategory(Enum):
+    """Enumeration of RunResults categories."""
+
     TEXT = 0
     INFO = 1
     WARNING = 2
@@ -14,21 +18,33 @@ class RunCategory(Enum):
 
     @property
     def is_info(self) -> bool:
+        """Test if category is INFO or higher."""
         return self.value >= RunCategory.INFO.value
 
     @property
     def is_warning(self) -> bool:
+        """Test if category is WARNING or higher."""
         return self.value >= RunCategory.WARNING.value
 
     @property
     def is_error(self) -> bool:
+        """Test if category is ERROR."""
         return self.value >= RunCategory.WARNING.value
 
 
 class RunLine(object):
+    """Class for RunResults line."""
+
     def __init__(self,
                  text: str,
                  category: RunCategory) -> None:
+        """
+        Initialize a new RunLine instance.
+
+        Args:
+            text (str): Text of the line.
+            category (RunCategory): Category of the line.
+        """
         self.text = text
         self.category = category
 
@@ -37,12 +53,24 @@ T = TypeVar('T', bound='RunResults')
 
 
 class RunResults(object):
+    """RunResults class."""
+
     def __init__(self,
                  start: datetime,
                  duration: float,
                  returncode: int,
                  output: str,
                  rules: List[Tuple[str, RunCategory]]) -> None:
+        """
+        Initialize a new RunResults instance.
+
+        Args:
+            start (datetime): Run start timestamp.
+            duration (float): Run duration in seconds.
+            returncode (int): Run application return code.
+            output (str): Run application output string.
+            rules: Run parse rules to classify output lines.
+        """
         self.start = start
         self.duration = duration
         self.returncode = returncode
@@ -63,6 +91,11 @@ class RunResults(object):
 
     @property
     def category(self) -> RunCategory:
+        """Get the RunCategory associated with the entire run."""
+        # Check for non-zero returncode
+        if self.returncode != 0:
+            return RunCategory.ERROR
+
         # If no lines then just return text
         if not self.lines:
             return RunCategory.TEXT
@@ -72,22 +105,27 @@ class RunResults(object):
 
     @property
     def info(self) -> bool:
-        return self.returncode != 0 or self.category.value >= RunCategory.INFO.value
+        """Test if the runs category is INFO or higher."""
+        return self.category.value >= RunCategory.INFO.value
 
     @property
     def warning(self) -> bool:
-        return self.returncode != 0 or self.category.value >= RunCategory.WARNING.value
+        """Test if the runs category is WARNING or higher."""
+        return self.category.value >= RunCategory.WARNING.value
 
     @property
     def error(self) -> bool:
-        return self.returncode != 0 or self.category.value >= RunCategory.ERROR.value
+        """Test if the runs category is ERROR or higher."""
+        return self.category.value >= RunCategory.ERROR.value
 
     @property
     def failure(self) -> bool:
+        """Test if the run failed."""
         return self.returncode != 0
 
     @property
     def error_info(self) -> str:
+        """Get text describing the run error."""
         # Get the error lines
         errors = [line.text for line in self.lines if line.category.is_error]
 
@@ -102,9 +140,12 @@ class RunResults(object):
               log: Log,
               level: RunCategory = RunCategory.TEXT) -> None:
         """
-        Print results.
-        """
+        Print RunResults to log.
 
+        Args:
+            log (Log): Log to write run to.
+            level (RunCategory): Level of items to include.
+        """
         for line in self.lines:
             # Skip lines below the level threshold
             if line.category.value < level.value:
@@ -123,6 +164,13 @@ class RunResults(object):
     @staticmethod
     def run(args: List[str],
             rules: List[Tuple[str, RunCategory]]) -> T:
+        """
+        Run program and return new RunResults.
+
+        Args:
+            args (List[str]): List of program arguments.
+            rules: Parse rules to categorize output lines.
+        """
         # Capture the start time
         start = datetime.now()
 

@@ -1,20 +1,18 @@
+"""Tests for python configuration parsing."""
+
 import pytest
 from VHDLTest.Configuration import Configuration
 
 
 def test_load_missing() -> None:
-    """
-    Test missing configuration.
-    """
+    """Test missing configuration."""
     with pytest.raises(RuntimeError):
         conf = Configuration('tests/configurations/missing.yaml')
         assert conf is None
 
 
 def test_load_empty() -> None:
-    """
-    Test empty configuration.
-    """
+    """Test empty configuration."""
     conf = Configuration('tests/configurations/empty.yaml')
     assert conf is not None
     assert len(conf.files) == 0
@@ -22,9 +20,7 @@ def test_load_empty() -> None:
 
 
 def test_load_valid() -> None:
-    """
-    Test valid configuration and contents.
-    """
+    """Test valid configuration and contents."""
     conf = Configuration('tests/configurations/valid.yaml')
     assert conf is not None
     assert len(conf.files) == 2

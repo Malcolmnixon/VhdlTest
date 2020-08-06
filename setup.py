@@ -1,3 +1,5 @@
+"""Module for python packaging setup."""
+
 import setuptools
 
 # Read README.md for the long description

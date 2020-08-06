@@ -1,15 +1,15 @@
+"""Module for the GHDL simulator class."""
+
 import os
 import shutil
-from .SimulatorInterface import SimulatorInterface
+from .SimulatorBase import SimulatorBase
 from ..runner.RunResults import RunCategory
 from ..runner.RunResults import RunResults
 from ..Configuration import Configuration
 
 
-class GHDL(SimulatorInterface):
-    """
-    GHDL Simulator class.
-    """
+class GHDL(SimulatorBase):
+    """GHDL Simulator class."""
 
     """Compile results parse rules."""
     compile_rules = [
@@ -33,11 +33,12 @@ class GHDL(SimulatorInterface):
     ]
 
     def __init__(self) -> None:
-        """GHDL Simulator constructor."""
+        """Initialize new GHDL instance."""
         super().__init__('GHDL')
 
     @classmethod
     def find_path(cls) -> str:
+        """Find the path to GHDL binary."""
         # First check environment variable
         path = os.getenv('VHDLTEST_GHDL_PATH')
         if path is not None:
@@ -52,6 +53,12 @@ class GHDL(SimulatorInterface):
         return os.path.dirname(path)
 
     def compile(self, config: Configuration) -> RunResults:
+        """
+        Compile VHDL source using GHDL compiler.
+
+        Args:
+            config (Configuration): Configuration data for compile.
+        """
         # Create the directory
         if not os.path.isdir('VHDLTest.out/GHDL'):
             os.makedirs('VHDLTest.out/GHDL')
@@ -71,6 +78,13 @@ class GHDL(SimulatorInterface):
             GHDL.compile_rules)
 
     def test(self, config: Configuration, test: str) -> RunResults:
+        """
+        Execute a test-bench using GHDL simulator.
+
+        Args:
+            config (Configuration): Configuration data for test.
+            test (str): Name of test-bench.
+        """
         # Run the test
         return RunResults.run([
             f'{self._path}/ghdl',

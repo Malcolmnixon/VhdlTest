@@ -9,3 +9,12 @@ junit-xml
 
 # Requires sphinx to generate documentation
 sphinx
+
+# Linting tools
+flake8
+flake8-annotations
+flake8-docstrings
+flake8-rst-docstrings
+
+# Testing tools
+pytest

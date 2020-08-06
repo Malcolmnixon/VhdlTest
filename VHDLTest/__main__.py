@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+"""VHDLTest application entry module."""
 
 from .VHDLTest import VHDLTest
 

@@ -1,31 +1,30 @@
+"""Module for SimulatorFactory class."""
+
 from typing import List
-from .SimulatorInterface import SimulatorInterface
+from .SimulatorBase import SimulatorBase
 from .ActiveHDL import ActiveHDL
 from .GHDL import GHDL
 
 
 class SimulatorFactory(object):
-    """
-    Factory for VHDL simulators
-    """
+    """Factory for VHDL simulators."""
 
     @staticmethod
-    def simulator_list() -> List[SimulatorInterface]:
-        """Returns the list of supported simulators."""
+    def simulator_list() -> List[SimulatorBase]:
+        """Get the list of supported simulators."""
         return [
             ActiveHDL,
             GHDL
         ]
 
     @staticmethod
-    def available_simulators() -> List[SimulatorInterface]:
-        """Returns the list of available simulators."""
+    def available_simulators() -> List[SimulatorBase]:
+        """Get the list of available simulators."""
         return [sim for sim in SimulatorFactory.simulator_list() if sim.is_available()]
 
     @staticmethod
-    def create_simulator() -> SimulatorInterface:
-        """Creates a simulator if available."""
-
+    def create_simulator() -> SimulatorBase:
+        """Create a simulator."""
         # Get the list of available simulators and return None if none available
         available = SimulatorFactory.available_simulators()
         if not available:
