@@ -4,7 +4,7 @@ from .VHDLTest import VHDLTest
 
 
 def main() -> None:
-    """Main routine of the VHDLTest program."""
+    """Run the VHDLTest class."""
     VHDLTest().run()
 
 
