@@ -3,7 +3,7 @@
 # VHDL Testbench Runner
 This python module runs VHDL testbenches and generates a report of the results.
 The project [website](https://vhdltest.readthedocs.io/en/latest/) contains more detailed information.
-
+![Console](/docs/source/images/console.png)
 
 ## Supported Simulators
 It requires a VHDL Simulator be installed on the system. Supported simulators are:
