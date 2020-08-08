@@ -12,6 +12,7 @@ of the MIT License.
    installing
    configuration
    running
+   test_benches
 
 
 
@@ -19,5 +20,4 @@ Indices and tables
 ==================
 
 * :ref:`genindex`
-* :ref:`modindex`
 * :ref:`search`
