@@ -1,0 +1,39 @@
+name: CI/Console
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - uses: ghdl/setup-ghdl-ci@nightly
+      with:
+        backend: mcode
+
+    - name: Setup Python
+      uses: actions/setup-python@v2
+    
+    - name: Install Requirements
+      run: |
+        python -m pip install --upgrade pip
+        pip install setuptools wheel
+        pip install -r requirements.txt
+      
+    - name: Build
+      run: |
+        python setup.py sdist bdist_wheel
+
+    - name: Install
+      run: |
+        python -m pip install --find-links=dist VHDLTest
+        
+    - name: Run Script
+      run: VHDLTest --config test.yaml --log test.log --junit test.xml --exit-0
+      working-directory: example
