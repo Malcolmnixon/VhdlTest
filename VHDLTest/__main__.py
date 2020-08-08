@@ -3,5 +3,10 @@
 from .VHDLTest import VHDLTest
 
 
-if __name__ == '__main__':
+def main() -> None:
+    """Main routine of the VHDLTest program."""
     VHDLTest().run()
+
+
+if __name__ == '__main__':
+    main()
