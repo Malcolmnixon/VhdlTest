@@ -30,9 +30,17 @@ jobs:
       run: |
         python setup.py sdist bdist_wheel
       
-    - name: Publish
+    - name: Publish Pypi Test
       env:
         TWINE_USERNAME: ${{ secrets.TESTPYPI_USERNAME }}
         TWINE_PASSWORD: ${{ secrets.TESTPYPI_PASSWORD }}
       run: |
         python -m twine upload --repository testpypi dist/*
+
+      
+    - name: Publish Pypi
+      env:
+        TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
+        TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+      run: |
+        python -m twine upload dist/*
