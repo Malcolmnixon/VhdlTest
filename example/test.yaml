@@ -8,6 +8,6 @@ files:
  
 tests:
  - full_adder_pass_tb
-# - full_adder_fail_tb
-# - half_adder_pass_tb
+ - full_adder_fail_tb
+ - half_adder_pass_tb
  - half_adder_fail_tb
