@@ -135,7 +135,7 @@ class VHDLTest(object):
             result = self._test_results[test]
 
             # Create the test case
-            test_case = TestCase('all', classname=test, elapsed_sec=result.duration, stdout=result.output)
+            test_case = TestCase(test, classname=test, elapsed_sec=result.duration, stdout=result.output)
 
             # Detect failures or errors
             if result.failure:
