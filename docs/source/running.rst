@@ -30,6 +30,10 @@ Options
 .. option:: -j --junit your-junit.xml
 
    Specify a JUnit report file to create.
+   
+.. option:: -t --tests test1 test2 test3
+
+   Specify the test-benches to run (overrides configuration file).
 
 .. option:: -v --verbose
 

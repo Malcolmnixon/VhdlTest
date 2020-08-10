@@ -50,6 +50,7 @@ class VHDLTest(object):
         parser.add_argument('-c', '--config', help='Configuration file')
         parser.add_argument('-l', '--log', help='Write to log file')
         parser.add_argument('-j', '--junit', help='Generate JUnit xml file')
+        parser.add_argument('-t', '--tests', nargs='+', help='List of test-benches to run')
         parser.add_argument('-v', '--verbose', default=False, action='store_true', help='Verbose logging of output')
         parser.add_argument('--exit-0', default=False, action='store_true', help='Exit with code 0 even if tests fail')
         parser.add_argument('--version', default=False, action='store_true', help='Display version information')
@@ -203,6 +204,12 @@ class VHDLTest(object):
 
         # Read the configuration
         self._config = Configuration(self._args.config)
+
+        # Override configuration with command line arguments
+        if self._args.tests:
+            self._config.tests = self._args.tests
+
+        # Count the number of tests
         self._test_count = len(self._config.tests)
 
         # Create a simulator

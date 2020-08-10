@@ -1,6 +1,6 @@
 """Module for VHDLTest Configuration class."""
 
-from typing import List, Dict, Any
+from typing import List
 import os
 import yaml
 
@@ -8,7 +8,8 @@ import yaml
 class Configuration(object):
     """YAML configuration class."""
 
-    _doc: Dict[str, Any]
+    files: List[str]
+    tests: List[str]
 
     def __init__(self, filename: str) -> None:
         """
@@ -30,22 +31,10 @@ class Configuration(object):
         if not isinstance(doc, dict):
             raise RuntimeError(f'Malformed configuration file {filename}')
 
-        # Save the dictionary
-        self._doc = doc
+        # Get the list of files
+        files = doc.get('files')
+        self.files = files if isinstance(files, list) else []
 
-    @property
-    def doc(self) -> Dict[str, Any]:
-        """Get the YAML document."""
-        return self._doc or {}
-
-    @property
-    def files(self) -> List[str]:
-        """Get the files mentioned in the configuration."""
-        file_list = self.doc.get('files')
-        return file_list if isinstance(file_list, list) else []
-
-    @property
-    def tests(self) -> List[str]:
-        """Get the tests mentioned in the configuration."""
-        test_list = self.doc.get('tests')
-        return test_list if isinstance(test_list, list) else []
+        # Get the list of tests
+        tests = doc.get('tests')
+        self.tests = tests if isinstance(files, list) else []
