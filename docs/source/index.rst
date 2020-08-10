@@ -13,6 +13,7 @@ of the MIT License.
    configuration
    running
    test_benches
+   changelog
 
 
 
