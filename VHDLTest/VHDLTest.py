@@ -43,8 +43,8 @@ class VHDLTest(object):
         """Parse command-line arguments into _args."""
         # Construct the argument parser
         parser = argparse.ArgumentParser(
-            prog='VHDL Testbench Runner (VHDLTest)',
-            description='''Runs VHDL Testbenches and generates a report of the
+            prog='VHDL Test-bench Runner (VHDLTest)',
+            description='''Runs VHDL Test-benches and generates a report of the
                          passes and failures. Reference documentation is located
                          at https://github.com/Malcolmnixon/VhdlTest''')
         parser.add_argument('-c', '--config', help='Configuration file')
@@ -65,7 +65,7 @@ class VHDLTest(object):
 
         # Check for version
         if self._args.version:
-            print(f'VHDL Testbench Runner (VHDLTest) version {VHDLTest.version}')
+            print(f'VHDL Test-bench Runner (VHDLTest) version {VHDLTest.version}')
             sys.exit(0)
 
         # Ensure we have a configuration
@@ -199,7 +199,7 @@ class VHDLTest(object):
             self._log.add_log_file(self._args.log)
 
         # Print the banner and capture the start time
-        self._log.write('VHDL Testbench Runner (VHDLTest)\n\n')
+        self._log.write('VHDL Test-bench Runner (VHDLTest)\n\n')
         elapsed_start = datetime.now()
 
         # Read the configuration
