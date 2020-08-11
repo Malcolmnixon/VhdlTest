@@ -1,6 +1,6 @@
 """Module for SimulatorFactory class."""
 
-from typing import List, Type, Optional
+from typing import Dict, Type, Optional
 from .SimulatorBase import SimulatorBase
 from .ActiveHDL import ActiveHDL
 from .GHDL import GHDL
@@ -9,26 +9,25 @@ from .GHDL import GHDL
 class SimulatorFactory(object):
     """Factory for VHDL simulators."""
 
-    @staticmethod
-    def simulator_list() -> List[Type[SimulatorBase]]:
-        """Get the list of supported simulators."""
-        return [
-            ActiveHDL,
-            GHDL
-        ]
+    """List of simulators."""
+    _simulators: Dict[str, Type[SimulatorBase]] = {
+        'activehdl': ActiveHDL,
+        'ghdl': GHDL
+    }
 
     @staticmethod
-    def available_simulators() -> List[Type[SimulatorBase]]:
-        """Get the list of available simulators."""
-        return [sim for sim in SimulatorFactory.simulator_list() if sim.is_available()]
-
-    @staticmethod
-    def create_simulator() -> Optional[SimulatorBase]:
+    def create_simulator(name: str) -> Optional[SimulatorBase]:
         """Create a simulator."""
-        # Get the list of available simulators and return None if none available
-        available = SimulatorFactory.available_simulators()
-        if not available:
+        if name:
+            # Find simulator in dictionary
+            sim_type = SimulatorFactory._simulators.get(name.lower())
+        else:
+            # Select first available
+            sim_type = next((s for s in SimulatorFactory._simulators.values() if s.is_available()), None)
+
+        # Handle not found or not available
+        if not sim_type or not sim_type.is_available():
             return None
 
         # Create an instance of the first available simulator
-        return available[0].create()
+        return sim_type.create()

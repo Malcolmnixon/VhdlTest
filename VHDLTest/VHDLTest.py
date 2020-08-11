@@ -51,6 +51,7 @@ class VHDLTest(object):
         parser.add_argument('-l', '--log', help='Write to log file')
         parser.add_argument('-j', '--junit', help='Generate JUnit xml file')
         parser.add_argument('-t', '--tests', nargs='+', help='List of test-benches to run')
+        parser.add_argument('-s', '--simulator', default='', help='Specify simulator (E.G. GHDL)')
         parser.add_argument('-v', '--verbose', default=False, action='store_true', help='Verbose logging of output')
         parser.add_argument('--exit-0', default=False, action='store_true', help='Exit with code 0 even if tests fail')
         parser.add_argument('--version', default=False, action='store_true', help='Display version information')
@@ -213,10 +214,10 @@ class VHDLTest(object):
         self._test_count = len(self._config.tests)
 
         # Create a simulator
-        self._simulator = SimulatorFactory.create_simulator()
+        self._simulator = SimulatorFactory.create_simulator(self._args.simulator)
         if self._simulator is None:
             self._log.write(Log.error,
-                            'Error: No simulator installed. Please add a simulator to the path',
+                            'Error: Simulator not found. Please add simulator to the path',
                             Log.end,
                             '\n')
             sys.exit(1)
