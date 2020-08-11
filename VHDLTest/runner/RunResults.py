@@ -1,10 +1,11 @@
 """Module for RunResults class and support types."""
 
+from __future__ import annotations
 import subprocess
 import re
 from datetime import datetime
 from enum import Enum
-from typing import TypeVar, List, Tuple
+from typing import List, Tuple
 from ..logger.Log import Log
 
 
@@ -49,16 +50,13 @@ class RunLine(object):
         self.category = category
 
 
-T = TypeVar('T', bound='RunResults')
-
-
 class RunResults(object):
     """RunResults class."""
 
     def __init__(self,
                  start: datetime,
                  duration: float,
-                 returncode: int,
+                 return_code: int,
                  output: str,
                  rules: List[Tuple[str, RunCategory]]) -> None:
         """
@@ -67,13 +65,13 @@ class RunResults(object):
         Args:
             start (datetime): Run start timestamp.
             duration (float): Run duration in seconds.
-            returncode (int): Run application return code.
+            return_code (int): Run application return code.
             output (str): Run application output string.
             rules: Run parse rules to classify output lines.
         """
         self.start = start
         self.duration = duration
-        self.returncode = returncode
+        self.return_code = return_code
         self.output = output
         self.lines = []
 
@@ -92,8 +90,8 @@ class RunResults(object):
     @property
     def category(self) -> RunCategory:
         """Get the RunCategory associated with the entire run."""
-        # Check for non-zero returncode
-        if self.returncode != 0:
+        # Check for non-zero return code
+        if self.return_code != 0:
             return RunCategory.ERROR
 
         # If no lines then just return text
@@ -121,7 +119,7 @@ class RunResults(object):
     @property
     def failure(self) -> bool:
         """Test if the run failed."""
-        return self.returncode != 0
+        return self.return_code != 0
 
     @property
     def error_info(self) -> str:
@@ -129,9 +127,9 @@ class RunResults(object):
         # Get the error lines
         errors = [line.text for line in self.lines if line.category.is_error]
 
-        # Add any returncode info
-        if self.returncode != 0:
-            errors.append(f'Program terminated with returncode {self.returncode}')
+        # Add any return code info
+        if self.return_code != 0:
+            errors.append(f'Program terminated with return code {self.return_code}')
 
         # Join into single line
         return '\n'.join(errors)
@@ -163,7 +161,7 @@ class RunResults(object):
 
     @staticmethod
     def run(args: List[str],
-            rules: List[Tuple[str, RunCategory]]) -> T:
+            rules: List[Tuple[str, RunCategory]]) -> RunResults:
         """
         Run program and return new RunResults.
 
@@ -178,10 +176,10 @@ class RunResults(object):
         try:
             # Run the process and capture the output
             out = subprocess.check_output(args, stderr=subprocess.STDOUT)
-            returncode = 0
+            return_code = 0
         except subprocess.CalledProcessError as err:
             out = err.output
-            returncode = err.returncode
+            return_code = err.returncode
 
         # Calculate the duration
         end = datetime.now()
@@ -191,6 +189,6 @@ class RunResults(object):
         return RunResults(
             start,
             duration,
-            returncode,
+            return_code,
             out.decode('utf-8'),
             rules)

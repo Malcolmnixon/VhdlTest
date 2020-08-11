@@ -1,11 +1,8 @@
 """Module for SimulatorBase class."""
 
-from typing import TypeVar
+from __future__ import annotations
 from ..Configuration import Configuration
 from ..runner.RunResults import RunResults
-
-
-T = TypeVar('T', bound='SimulatorBase')
 
 
 class SimulatorBase(object):
@@ -42,7 +39,7 @@ class SimulatorBase(object):
         raise NotImplementedError
 
     @classmethod
-    def create(cls) -> T:
+    def create(cls) -> SimulatorBase:
         """Create an instance of the simulator."""
         raise NotImplementedError
 
