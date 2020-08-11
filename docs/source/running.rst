@@ -35,6 +35,12 @@ Options
 
    Specify the test-benches to run (overrides configuration file).
 
+.. option:: -s --simulator simulator_name
+
+   Specify the simulator to use. Options are:
+    - ActiveHDL
+    - GHDL
+   
 .. option:: -v --verbose
 
    Produce verbose output from simulator.
