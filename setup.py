@@ -9,7 +9,7 @@ with open('README.md', 'r') as fh:
 # Setup information
 setuptools.setup(
     name='VHDLTest',
-    version='0.1.1',
+    version='0.2.0',
     author='Malcolm Nixon',
     description='VHDL Testbench Runner',
     long_description=long_description,
