@@ -23,7 +23,7 @@ class VHDLTest(object):
     _test_result: Dict[str, RunResults]
 
     # VHDLTest version
-    version = "0.1.1"
+    version = "0.2.0"
 
     def __init__(self) -> None:
         """Initialize a new VHDLTest instance."""
