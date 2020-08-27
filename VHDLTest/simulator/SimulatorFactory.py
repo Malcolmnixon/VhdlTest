@@ -4,6 +4,7 @@ from typing import Dict, Type, Optional
 from .SimulatorBase import SimulatorBase
 from .ActiveHDL import ActiveHDL
 from .GHDL import GHDL
+from .Vivado import Vivado
 
 
 class SimulatorFactory(object):
@@ -12,7 +13,8 @@ class SimulatorFactory(object):
     """List of simulators."""
     _simulators: Dict[str, Type[SimulatorBase]] = {
         'activehdl': ActiveHDL,
-        'ghdl': GHDL
+        'ghdl': GHDL,
+        'vivado': Vivado
     }
 
     @staticmethod

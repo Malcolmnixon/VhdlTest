@@ -161,7 +161,9 @@ class RunResults(object):
 
     @staticmethod
     def run(args: List[str],
-            rules: List[Tuple[str, RunCategory]]) -> RunResults:
+            rules: List[Tuple[str, RunCategory]],
+            shell: bool = False,
+            cwd: str = None) -> RunResults:
         """
         Run program and return new RunResults.
 
@@ -175,7 +177,7 @@ class RunResults(object):
         # Create results
         try:
             # Run the process and capture the output
-            out = subprocess.check_output(args, stderr=subprocess.STDOUT)
+            out = subprocess.check_output(args, stderr=subprocess.STDOUT, shell=shell, cwd=cwd)
             return_code = 0
         except subprocess.CalledProcessError as err:
             out = err.output
